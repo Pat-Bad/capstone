@@ -44,6 +44,8 @@ public class AppUser implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Playlist> playlists;
 
+    private String email;
+
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
@@ -53,13 +55,15 @@ public class AppUser implements UserDetails {
                 .collect(Collectors.toList());
     }
 
-    public AppUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        this(username, password, true, true, true, true, authorities);
+    public AppUser(String username, String password, String email,Collection<? extends GrantedAuthority> authorities) {
+        this(username, password, email, true, true, true, true, authorities);
     }
 
-    public AppUser(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
+    public AppUser(String username, String password, String email, boolean enabled, boolean accountNonExpired,
+                   boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
+        this.email = email;
         this.enabled = enabled;
         this.accountNonExpired = accountNonExpired;
         this.credentialsNonExpired = credentialsNonExpired;

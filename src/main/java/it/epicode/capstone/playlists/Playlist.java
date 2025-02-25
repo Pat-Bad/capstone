@@ -25,9 +25,9 @@ public class Playlist {
     @ElementCollection
     @CollectionTable(name = "playlist_youtube_urls", joinColumns = @JoinColumn(name = "playlist_id"))
     @Column(name = "youtube_url")
-    private List<String> youtubeUrls;  // Lista di URL dei video YouTube
+    private List<String> youtubeUrls;  // Lista di URL dei video YouTube creata grazie a elementcollection
 
-    @OneToMany(mappedBy="playlist")
+    @OneToMany(mappedBy="playlist") //ogni playlist può avere più memo
     private List<VocalMemo> vocalMemo;
 
     @ManyToOne(fetch = FetchType.LAZY)
