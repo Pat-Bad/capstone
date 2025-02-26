@@ -39,7 +39,7 @@ public PlaylistResponse update(Long id, @Valid PlaylistRequest request) {
     return playlistMapper.toPlaylistResponse(playlist);
 }
 
-//DELETE
+    //DELETE
     public void delete(Long id) {
         Playlist playlist = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
