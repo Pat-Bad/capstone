@@ -27,7 +27,6 @@ public class VocalMemo {
     // Dato binario per la registrazione vocale
 @CreationTimestamp
     private LocalDate dataInserimento;
-
     private String nomeRegistrazione;
 
     @ManyToOne (fetch = FetchType.LAZY)

@@ -21,7 +21,6 @@ public class PlaylistService {
     private final VocalMemoRepository vocalMemoRepository;
     private final PlaylistMapper playlistMapper;
 
-
 //POST
 public PlaylistResponse save(@Valid PlaylistRequest request) {
     Playlist playlist = new Playlist();
@@ -39,34 +38,34 @@ public PlaylistResponse update(Long id, @Valid PlaylistRequest request) {
     return playlistMapper.toPlaylistResponse(playlist);
 }
 
-    //DELETE
-    public void delete(Long id) {
-        Playlist playlist = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
-        repository.delete(playlist);
+//DELETE
+public void delete(Long id) {
+    Playlist playlist = repository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
+    repository.delete(playlist);
     }
 
 
-    public PlaylistResponse findById(Long id) {
-        Playlist playlist = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
-        return new PlaylistResponse(
+public PlaylistResponse findById(Long id) {
+    Playlist playlist = repository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
+    return new PlaylistResponse(
                 playlist.getId(),
                 playlist.getNomePlaylist(),
                 playlist.getYoutubeUrls(),
                 playlist.getVocalMemo() != null ? playlist.getVocalMemo().stream().map(VocalMemo::getId).toList() : null);
     }
 
-    public List<PlaylistResponse> findAll() {
-        return repository.findAll().stream()
-                .map(playlist -> new PlaylistResponse(playlist.getId(),
+public List<PlaylistResponse> findAll() {
+    return repository.findAll().stream()
+            .map(playlist -> new PlaylistResponse(playlist.getId(),
                         playlist.getNomePlaylist(),
                         playlist.getYoutubeUrls(),
                 playlist.getVocalMemo() != null ? playlist.getVocalMemo().stream().map(VocalMemo::getId).toList() : null))
                 .toList();
     }
 
-    public PlaylistResponse addVocalMemoToPlaylist(Long playlistId, Long memoId) {
+public PlaylistResponse addVocalMemoToPlaylist(Long playlistId, Long memoId) {
         Playlist playlist = repository.findById(playlistId)
                 .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
         VocalMemo memo = vocalMemoRepository.findById(memoId)
@@ -80,7 +79,7 @@ public PlaylistResponse update(Long id, @Valid PlaylistRequest request) {
         return playlistMapper.toPlaylistResponse(playlist);
     }
 
-    public PlaylistResponse removeVocalMemoFromPlaylist(Long playlistId, Long memoId) {
+public PlaylistResponse removeVocalMemoFromPlaylist(Long playlistId, Long memoId) {
         Playlist playlist = repository.findById(playlistId)
                 .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
 
@@ -91,12 +90,8 @@ public PlaylistResponse update(Long id, @Valid PlaylistRequest request) {
             playlist.getVocalMemo().remove(memo);
             repository.save(playlist);
         }
-
         return playlistMapper.toPlaylistResponse(playlist);
     }
-
-
-
 }
 
 

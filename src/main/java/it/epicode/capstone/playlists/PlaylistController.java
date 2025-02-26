@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -54,7 +53,6 @@ public class PlaylistController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
     public PlaylistResponse addVocalMemoToPlaylist(@PathVariable Long playlistId, @PathVariable Long memoId) {
-
         return playlistService.addVocalMemoToPlaylist(playlistId, memoId);
     }
 
@@ -64,6 +62,4 @@ public class PlaylistController {
     public PlaylistResponse removeVocalMemoFromPlaylist(@PathVariable Long playlistId, @PathVariable Long memoId) {
         return playlistService.removeVocalMemoFromPlaylist(playlistId, memoId);
     }
-
-
 }

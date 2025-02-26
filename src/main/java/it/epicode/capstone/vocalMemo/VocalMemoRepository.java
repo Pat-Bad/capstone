@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface VocalMemoRepository extends JpaRepository<VocalMemo, Long> {
     List<VocalMemo> findByUserId(Long userId);
-
 }
