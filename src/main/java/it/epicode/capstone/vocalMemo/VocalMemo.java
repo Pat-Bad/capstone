@@ -21,9 +21,10 @@ public class VocalMemo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob  //LARGE OBJECT
-    @Basic(fetch = FetchType.LAZY)
+    @Lob
+    @Column(columnDefinition = "BYTEA")
     private byte[] registrazione;
+
     // Dato binario per la registrazione vocale
 @CreationTimestamp
     private LocalDate dataInserimento;
@@ -36,4 +37,8 @@ public class VocalMemo {
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private AppUser user;
+
+    public byte[] getRegistrazione() {
+        return registrazione;
+    }
 }

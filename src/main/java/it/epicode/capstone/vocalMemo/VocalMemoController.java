@@ -4,6 +4,8 @@ import it.epicode.capstone.authentication.AppUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +25,12 @@ public class VocalMemoController {
         return service.findAllByUser(user.getId());
     }
 
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
     public VocalMemoResponse findById(@PathVariable Long id) {
         return service.findById(id);
-    }
+    }*/
 
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -49,4 +51,17 @@ public class VocalMemoController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         service.delete(id);}
+
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<byte[]> getAudio(@PathVariable Long id) {
+        byte[] audioData = service.getAudioFile(id);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(audioData);
+    }
+
 }

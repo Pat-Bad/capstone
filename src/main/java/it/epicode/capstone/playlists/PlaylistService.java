@@ -1,8 +1,9 @@
 package it.epicode.capstone.playlists;
 
-import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.vocalMemo.VocalMemo;
 import it.epicode.capstone.vocalMemo.VocalMemoRepository;
+import it.epicode.capstone.youtube.AddVideoToPlaylistRequest;
+import it.epicode.capstone.youtube.RemoveVideoRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -12,6 +13,7 @@ import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -92,6 +94,45 @@ public PlaylistResponse removeVocalMemoFromPlaylist(Long playlistId, Long memoId
         }
         return playlistMapper.toPlaylistResponse(playlist);
     }
+
+
+    public PlaylistResponse addVideoToPlaylist(AddVideoToPlaylistRequest request) {
+            Playlist playlist = repository.findById(request.getPlaylistId())
+                    .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
+
+            playlist.getYoutubeUrls().add(request.getVideoUrl());
+            repository.save(playlist);
+
+        return new PlaylistResponse(
+                playlist.getId(),
+                playlist.getNomePlaylist(),
+                playlist.getYoutubeUrls(),
+                playlist.getVocalMemo() != null
+                        ? playlist.getVocalMemo().stream().map(VocalMemo::getId).collect(Collectors.toList())
+                        : new ArrayList<>()
+        );
+
+    }
+
+    public PlaylistResponse removeVideoFromPlaylist(@Valid RemoveVideoRequest request) {
+        Playlist playlist = repository.findById(request.getPlaylistId())
+                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
+
+        playlist.getYoutubeUrls().remove(request.getVideoUrl());
+        repository.save(playlist);
+
+        return new PlaylistResponse(
+                playlist.getId(),
+                playlist.getNomePlaylist(),
+                playlist.getYoutubeUrls(),
+                playlist.getVocalMemo() != null
+                        ? playlist.getVocalMemo().stream().map(VocalMemo::getId).collect(Collectors.toList())
+                        : new ArrayList<>()
+        );
+
+    }
+
+
 }
 
 

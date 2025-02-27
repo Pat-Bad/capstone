@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,10 +27,12 @@ public class Playlist {
     @ElementCollection
     @CollectionTable(name = "playlist_youtube_urls", joinColumns = @JoinColumn(name = "playlist_id"))
     @Column(name = "youtube_url")
-    private List<String> youtubeUrls;  // Lista di URL dei video YouTube creata grazie a elementcollection
+    private List<String> youtubeUrls = new ArrayList<>();  // Lista di URL dei video YouTube creata grazie a
+    // elementcollection
 
-    @OneToMany(mappedBy="playlist") //ogni playlist può avere più memo
-    private List<VocalMemo> vocalMemo;
+    @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VocalMemo> vocalMemo = new ArrayList<>();
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

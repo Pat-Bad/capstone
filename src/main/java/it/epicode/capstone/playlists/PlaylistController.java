@@ -1,6 +1,7 @@
 package it.epicode.capstone.playlists;
 
-
+import it.epicode.capstone.youtube.AddVideoToPlaylistRequest;
+import it.epicode.capstone.youtube.RemoveVideoRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -61,5 +62,15 @@ public class PlaylistController {
     @ResponseStatus(HttpStatus.OK)
     public PlaylistResponse removeVocalMemoFromPlaylist(@PathVariable Long playlistId, @PathVariable Long memoId) {
         return playlistService.removeVocalMemoFromPlaylist(playlistId, memoId);
+    }
+
+    @PostMapping("/add-video")
+    public PlaylistResponse addVideoToPlaylist(@RequestBody @Valid AddVideoToPlaylistRequest request) {
+        return playlistService.addVideoToPlaylist(request);
+    }
+
+    @DeleteMapping("/remove-video")
+    public PlaylistResponse removeVideoFromPlaylist(@RequestBody @Valid RemoveVideoRequest request) {
+        return playlistService.removeVideoFromPlaylist(request);
     }
 }
