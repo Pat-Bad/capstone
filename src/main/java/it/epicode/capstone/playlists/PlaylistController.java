@@ -73,4 +73,10 @@ public class PlaylistController {
     public PlaylistResponse removeVideoFromPlaylist(@RequestBody @Valid RemoveVideoRequest request) {
         return playlistService.removeVideoFromPlaylist(request);
     }
+
+    @GetMapping("/{id}/contenuti")
+    public PlaylistResponse getPlaylistWithContent(@PathVariable Long id) {
+        return playlistService.getPlaylistWithContent(id);
+    }
+
 }

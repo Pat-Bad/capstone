@@ -53,7 +53,7 @@ public class VocalMemoController {
         service.delete(id);}
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")  //Questa get restituisce proprio il vocal memo, non i dettagli e basta
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<byte[]> getAudio(@PathVariable Long id) {
@@ -63,5 +63,12 @@ public class VocalMemoController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(audioData);
     }
+
+    @PutMapping("/{vocalMemoId}/playlist/{playlistId}")
+    @ResponseStatus(HttpStatus.OK)
+    public VocalMemoResponse assignToPlaylist(@PathVariable Long vocalMemoId, @PathVariable Long playlistId) {
+        return service.assignToPlaylist(vocalMemoId, playlistId);
+    }
+
 
 }

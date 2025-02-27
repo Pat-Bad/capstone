@@ -1,6 +1,8 @@
 package it.epicode.capstone.vocalMemo;
 
 import it.epicode.capstone.authentication.AppUser;
+import it.epicode.capstone.playlists.Playlist;
+import it.epicode.capstone.playlists.PlaylistRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -17,13 +19,15 @@ import java.util.List;
 public class VocalMemoService {
     private final VocalMemoRepository repository;
     private final VocalMemoMapper vocalMemoMapper;
+    private final PlaylistRepository playlistRepository;
 
 @Transactional
 public VocalMemoResponse save(@Valid VocalMemoRequest request, AppUser user) {
-        VocalMemo vocalMemo = new VocalMemo();
-        BeanUtils.copyProperties(request, vocalMemo);
-        vocalMemo.setUser(user);
-        repository.save(vocalMemo);
+
+    VocalMemo vocalMemo = new VocalMemo();
+    vocalMemo.setRegistrazione(request.getRegistrazione());
+    vocalMemo.setNomeRegistrazione(request.getNomeRegistrazione());
+    vocalMemo.setUser(user);
         return vocalMemoMapper.toVocalMemoResponse(vocalMemo, "http://localhost:8080/api/memo-vocali/" + vocalMemo.getId() + "/audio");
     }
 
@@ -45,7 +49,7 @@ public VocalMemoResponse update(Long id, @Valid VocalMemoRequest request) {
     }
 
     @Transactional
-public void delete(Long id) {
+    public void delete(Long id) {
         VocalMemo vocalMemo = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Memo vocale non trovata"));
         repository.delete(vocalMemo);
@@ -82,6 +86,21 @@ public List<VocalMemoResponse> findAllByUser(Long userId) {
                  .orElseThrow(() -> new EntityNotFoundException("Memo vocale non trovato"));
 
         return vocalMemo.getRegistrazione();
+    }
+
+
+    @Transactional
+    public VocalMemoResponse assignToPlaylist(Long vocalMemoId, Long playlistId) {
+        VocalMemo vocalMemo = repository.findById(vocalMemoId)
+                .orElseThrow(() -> new EntityNotFoundException("Memo vocale non trovata"));
+
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
+
+        vocalMemo.setPlaylist(playlist);
+        repository.save(vocalMemo);
+
+        return vocalMemoMapper.toVocalMemoResponse(vocalMemo, "http://localhost:8080/api/memo-vocali/" + vocalMemo.getId() + "/audio");
     }
 
 
