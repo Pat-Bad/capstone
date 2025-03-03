@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+//mapper per il dato che voglio in response, non voglio l'oggetto intero
 @Component
 @RequiredArgsConstructor
 public class PlaylistMapper {

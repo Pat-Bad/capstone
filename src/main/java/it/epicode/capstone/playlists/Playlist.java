@@ -36,5 +36,5 @@ public class Playlist {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private AppUser user;  // Relazione con l'utente che ha creato la playlist
+    private AppUser user;
 }

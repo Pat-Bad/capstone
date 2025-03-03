@@ -2,6 +2,8 @@ package it.epicode.capstone.vocalMemo;
 
 import org.springframework.stereotype.Component;
 
+//mapper per il dato che voglio in response, non voglio l'oggetto intero
+
 @Component
 public class VocalMemoMapper {
     public VocalMemoResponse toVocalMemoResponse(VocalMemo vocalMemo, String audioUrl) {

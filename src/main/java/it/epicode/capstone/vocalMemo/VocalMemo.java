@@ -21,7 +21,7 @@ public class VocalMemo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
+    @Lob //consigliato dal prof. BYTEA ottimale per postgres, per salvare dati binari(multimedia file)
     @Column(columnDefinition = "BYTEA")
     private byte[] registrazione;
 
