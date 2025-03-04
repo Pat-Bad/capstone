@@ -19,7 +19,6 @@ import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -31,36 +30,36 @@ public class PlaylistService {
     private final PlaylistMapper playlistMapper;
     private final VocalMemoMapper vocalMemoMapper;
 
-//POST
-public PlaylistResponse save(@Valid PlaylistRequest request, @AuthenticationPrincipal AppUser user) {
-    Playlist playlist = new Playlist();
-    playlist.setNomePlaylist(request.getNomePlaylist());  // Copia manualmente il nome
-    playlist.setYoutubeUrls(request.getYoutubeUrls());  // Copia gli URL di YouTube
-    playlist.setVocalMemo(new ArrayList<>());  // Evita problemi di riferimento null
+    //POST
+    public PlaylistResponse save(@Valid PlaylistRequest request, @AuthenticationPrincipal AppUser user) {
+        Playlist playlist = new Playlist();
+        playlist.setNomePlaylist(request.getNomePlaylist());  // Copia manualmente il nome
+        playlist.setYoutubeUrls(request.getYoutubeUrls());  // Copia gli URL di YouTube
+        playlist.setVocalMemo(new ArrayList<>());  // Evita problemi di riferimento null
 
-    AppUser persistedUser = userRepository.findById(user.getId())
-            .orElseThrow(() -> new RuntimeException("Utente non trovato nel database!"));
-    playlist.setUser(persistedUser);
+        AppUser persistedUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("Utente non trovato nel database!"));
+        playlist.setUser(persistedUser);
 
 
-    repository.save(playlist);
-    return playlistMapper.toPlaylistResponse(playlist);
-}
+        repository.save(playlist);
+        return playlistMapper.toPlaylistResponse(playlist);
+    }
 
-//PUT
-public PlaylistResponse update(Long id, @Valid PlaylistRequest request) {
-    Playlist playlist = repository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
-    BeanUtils.copyProperties(request,playlist);
-    repository.save(playlist);
-    return playlistMapper.toPlaylistResponse(playlist);
-}
+    //PUT
+    public PlaylistResponse update(Long id, @Valid PlaylistRequest request) {
+        Playlist playlist = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
+        BeanUtils.copyProperties(request, playlist);
+        repository.save(playlist);
+        return playlistMapper.toPlaylistResponse(playlist);
+    }
 
-//DELETE
-public void delete(Long id) {
-    Playlist playlist = repository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
-    repository.delete(playlist);
+    //DELETE
+    public void delete(Long id) {
+        Playlist playlist = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
+        repository.delete(playlist);
     }
 
 
@@ -114,7 +113,7 @@ public void delete(Long id) {
         return playlistMapper.toPlaylistResponse(playlist);
     }
 
-public PlaylistResponse removeVocalMemoFromPlaylist(Long playlistId, Long memoId) {
+    public PlaylistResponse removeVocalMemoFromPlaylist(Long playlistId, Long memoId) {
         Playlist playlist = repository.findById(playlistId)
                 .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
 
@@ -190,7 +189,25 @@ public PlaylistResponse removeVocalMemoFromPlaylist(Long playlistId, Long memoId
     }
 
 
+    public List<PlaylistResponse> findAllByUser(@AuthenticationPrincipal AppUser user) {
+        if (user == null) {
+            throw new RuntimeException("Utente non autenticato!");
+        }
+
+        return repository.findAllByUser(user).stream()
+                .map(playlist -> new PlaylistResponse(
+                        playlist.getId(),
+                        playlist.getNomePlaylist(),
+                        playlist.getYoutubeUrls(),
+                        playlist.getVocalMemo() != null
+                                ? playlist.getVocalMemo().stream()
+                                .map(memo -> vocalMemoMapper.toVocalMemoResponse(memo,
+                                        "http://localhost:8080/api/memo-vocali/" + memo.getId() + "/audio"))
+                                .toList()
+                                : new ArrayList<>()
+                )).toList();
+    }
+
 
 }
-
 
