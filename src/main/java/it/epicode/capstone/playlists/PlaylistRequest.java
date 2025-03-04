@@ -13,7 +13,7 @@ import java.util.List;
 public class PlaylistRequest {
     @NotBlank(message="Dai un nome alla tua playlist")
     private String nomePlaylist;
-    @NotEmpty(message="Ricordati di inserire i link di Youtube")
+    //@NotEmpty(message="Ricordati di inserire i link di Youtube")
     private List<String> youtubeUrls;
     private List<Long> vocalMemoIds;
 }

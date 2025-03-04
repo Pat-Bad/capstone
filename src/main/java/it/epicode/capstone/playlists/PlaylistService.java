@@ -1,5 +1,7 @@
 package it.epicode.capstone.playlists;
 
+import it.epicode.capstone.authentication.AppUser;
+import it.epicode.capstone.authentication.AppUserRepository;
 import it.epicode.capstone.vocalMemo.VocalMemo;
 import it.epicode.capstone.vocalMemo.VocalMemoMapper;
 import it.epicode.capstone.vocalMemo.VocalMemoRepository;
@@ -10,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
@@ -24,13 +27,22 @@ import java.util.stream.Collectors;
 public class PlaylistService {
     private final PlaylistRepository repository;
     private final VocalMemoRepository vocalMemoRepository;
+    private final AppUserRepository userRepository;
     private final PlaylistMapper playlistMapper;
     private final VocalMemoMapper vocalMemoMapper;
 
 //POST
-public PlaylistResponse save(@Valid PlaylistRequest request) {
+public PlaylistResponse save(@Valid PlaylistRequest request, @AuthenticationPrincipal AppUser user) {
     Playlist playlist = new Playlist();
-    BeanUtils.copyProperties(request, playlist);
+    playlist.setNomePlaylist(request.getNomePlaylist());  // Copia manualmente il nome
+    playlist.setYoutubeUrls(request.getYoutubeUrls());  // Copia gli URL di YouTube
+    playlist.setVocalMemo(new ArrayList<>());  // Evita problemi di riferimento null
+
+    AppUser persistedUser = userRepository.findById(user.getId())
+            .orElseThrow(() -> new RuntimeException("Utente non trovato nel database!"));
+    playlist.setUser(persistedUser);
+
+
     repository.save(playlist);
     return playlistMapper.toPlaylistResponse(playlist);
 }

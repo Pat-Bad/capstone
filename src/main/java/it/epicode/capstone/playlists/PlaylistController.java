@@ -1,11 +1,13 @@
 package it.epicode.capstone.playlists;
 
+import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.youtube.AddVideoToPlaylistRequest;
 import it.epicode.capstone.youtube.RemoveVideoRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -32,8 +34,8 @@ public class PlaylistController {
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.CREATED)
-    public PlaylistResponse save(@RequestBody @Valid PlaylistRequest request){
-        return playlistService.save(request);
+    public PlaylistResponse save(@RequestBody @Valid PlaylistRequest request,@AuthenticationPrincipal AppUser user){
+        return playlistService.save(request, user);
     }
 
     @PutMapping("/{id}")
