@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,4 +17,6 @@ public class VocalMemoRequest {
 
     @NotBlank(message="Dai un titolo alla registrazione")
     private String nomeRegistrazione;
+
+    private LocalDate dataInserimento;
 }

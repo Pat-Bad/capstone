@@ -21,7 +21,7 @@ public class VocalMemo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob //consigliato dal prof. BYTEA ottimale per postgres, per salvare dati binari(multimedia file)
+
     @Column(columnDefinition = "BYTEA")
     private byte[] registrazione;
 
@@ -30,6 +30,7 @@ public class VocalMemo {
     private LocalDate dataInserimento;
     private String nomeRegistrazione;
 
+
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "playlist_id", nullable = true)
     private Playlist playlist;
@@ -37,8 +38,4 @@ public class VocalMemo {
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private AppUser user;
-
-    public byte[] getRegistrazione() {
-        return registrazione;
-    }
 }

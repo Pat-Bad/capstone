@@ -14,5 +14,5 @@ public class VocalMemoResponse {
     private LocalDate dataInserimento;
     private Long userId;
     private Long playlistId;
-    private String audioUrl;
+    private byte[] registrazione;
 }

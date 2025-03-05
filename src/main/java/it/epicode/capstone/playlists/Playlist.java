@@ -31,7 +31,7 @@ public class Playlist {
     // elementcollection
 
     @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VocalMemo> vocalMemo = new ArrayList<>();
+    private List<VocalMemo> vocalMemos = new ArrayList<>();
 
 
     @ManyToOne(fetch = FetchType.LAZY)

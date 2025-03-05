@@ -6,14 +6,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class VocalMemoMapper {
-    public VocalMemoResponse toVocalMemoResponse(VocalMemo vocalMemo, String audioUrl) {
+    public VocalMemoResponse toVocalMemoResponse(VocalMemo vocalMemo) {
         return new VocalMemoResponse(
                 vocalMemo.getId(),
                 vocalMemo.getNomeRegistrazione(),
                 vocalMemo.getDataInserimento(),
                 vocalMemo.getUser().getId(),
                 vocalMemo.getPlaylist() != null ? vocalMemo.getPlaylist().getId() : null,
-                audioUrl
+                vocalMemo.getRegistrazione()
         );
     }
 }
