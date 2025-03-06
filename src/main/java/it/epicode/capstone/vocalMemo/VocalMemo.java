@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDate;
 
 @Entity
@@ -18,24 +17,23 @@ import java.time.LocalDate;
 public class VocalMemo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-
-    @Column(columnDefinition = "BYTEA")
+    @Lob
     private byte[] registrazione;
 
-    // Dato binario per la registrazione vocale
-@CreationTimestamp
+    @CreationTimestamp
     private LocalDate dataInserimento;
+
     private String nomeRegistrazione;
 
-
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name = "playlist_id", nullable = true)
+    @OneToOne
+    @JoinColumn(name = "playlist_id", nullable = false)
     private Playlist playlist;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private AppUser user;
+
 }

@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,15 +23,13 @@ public class Playlist {
     @Column(nullable = false)
     private String nomePlaylist;
 
-    @ElementCollection
+    @ElementCollection //Relazione onetomany per tipi simple, non entità a sé. Crea la tabella con solo gli url
     @CollectionTable(name = "playlist_youtube_urls", joinColumns = @JoinColumn(name = "playlist_id"))
     @Column(name = "youtube_url")
-    private List<String> youtubeUrls = new ArrayList<>();  // Lista di URL dei video YouTube creata grazie a
-    // elementcollection
+    private List<String> youtubeUrls = new ArrayList<>(); //inizializzo per evitare nullpointer
 
-    @OneToMany(mappedBy = "playlist", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VocalMemo> vocalMemos = new ArrayList<>();
-
+   @OneToOne (fetch = FetchType.LAZY, mappedBy = "playlist")
+    private VocalMemo vocalMemo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

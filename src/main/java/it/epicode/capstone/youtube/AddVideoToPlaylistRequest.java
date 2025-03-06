@@ -14,7 +14,8 @@ public class AddVideoToPlaylistRequest {
     private Long playlistId;
 
     @NotNull(message="Inserisci l'url del video")
-    private String videoUrl;
+    private String youtubeUrl;
+
 
 
 }

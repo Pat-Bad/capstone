@@ -18,73 +18,35 @@ import java.util.List;
 public class PlaylistController {
     private final PlaylistService playlistService;
 
-    @GetMapping("")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @ResponseStatus(HttpStatus.OK)
-    public List<PlaylistResponse> findAll(){
-        return playlistService.findAll();}
-
-    @GetMapping("/user")
-    public List<PlaylistResponse> getUserPlaylists(@AuthenticationPrincipal AppUser user) {
-
-        return playlistService.findAllByUser(user);
-    }
-
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @ResponseStatus(HttpStatus.OK)
-    public PlaylistResponse findById(@PathVariable Long id){
-        return playlistService.findById(id);
-    }
-
     @PostMapping("")
-    @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.CREATED)
-    public PlaylistResponse save(@RequestBody @Valid PlaylistRequest request,@AuthenticationPrincipal AppUser user){
+    public PlaylistResponse save(@Valid PlaylistRequest request, @AuthenticationPrincipal AppUser user) {
         return playlistService.save(request, user);
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public PlaylistResponse update(@PathVariable Long id, @RequestBody @Valid PlaylistRequest request){
+    public List<Playlist> findAll() {
+        return playlistService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Playlist findById(@PathVariable Long id) {
+        return playlistService.findById(id);
+
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PlaylistResponse update(@PathVariable Long id, @Valid PlaylistRequest request) {
         return playlistService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         playlistService.delete(id);
-    }
-
-    @PatchMapping("/{playlistId}/add-memo/{memoId}")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @ResponseStatus(HttpStatus.OK)
-    public PlaylistResponse addVocalMemoToPlaylist(@PathVariable Long playlistId, @PathVariable Long memoId) {
-        return playlistService.addVocalMemoToPlaylist(playlistId, memoId);
-    }
-
-    @PatchMapping("/{playlistId}/remove-memo/{memoId}")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @ResponseStatus(HttpStatus.OK)
-    public PlaylistResponse removeVocalMemoFromPlaylist(@PathVariable Long playlistId, @PathVariable Long memoId) {
-        return playlistService.removeVocalMemoFromPlaylist(playlistId, memoId);
-    }
-
-    @PostMapping("/add-video")
-    public PlaylistResponse addVideoToPlaylist(@RequestBody @Valid AddVideoToPlaylistRequest request) {
-        return playlistService.addVideoToPlaylist(request);
-    }
-
-    @DeleteMapping("/remove-video")
-    public PlaylistResponse removeVideoFromPlaylist(@RequestBody @Valid RemoveVideoRequest request) {
-        return playlistService.removeVideoFromPlaylist(request);
-    }
-
-    @GetMapping("/{id}/contenuti")
-    public PlaylistResponse getPlaylistWithContent(@PathVariable Long id) {
-        return playlistService.getPlaylistWithContent(id);
     }
 
 }
