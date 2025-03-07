@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
@@ -23,29 +24,25 @@ public class VocalMemoService {
     private final PlaylistRepository playlistRepository;
 
 //POST
-@Transactional
-public VocalMemoResponse save(@Valid VocalMemoRequest request, Long playlistId, AppUser user) {
 
-    VocalMemo vocalMemo = new VocalMemo();
-    vocalMemo.setNomeRegistrazione(request.getNomeRegistrazione());
-    vocalMemo.setUser(user);
-    vocalMemo.setRegistrazione(request.getRegistrazione().getBytes());
-    //devo trovare la playlist con l'id
-    Playlist playlist = playlistRepository.findById(playlistId)
-            .orElseThrow(() -> new EntityNotFoundException("Playlist not found " + playlistId));
-    vocalMemo.setPlaylist(playlist);
-    //salvo la vocalmemo
-    VocalMemo savedVocalMemo = vocalMemoRepository.save(vocalMemo);
-    //creo la response
+    public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request,
+                                  Playlist playlist,
+                                  @AuthenticationPrincipal AppUser user) {
+        VocalMemo vocalMemo = new VocalMemo();
+        vocalMemo.setUser(user);
+        vocalMemo.setPlaylist(playlist);
+        vocalMemo.setUrl(request.getUrl()); // Aggiunto per salvare il file audio
+        vocalMemo.setNomeRegistrazione("Memo di " + user.getUsername()); // Nome predefinito
 
-   VocalMemoResponse response = new VocalMemoResponse();
+        VocalMemo savedVocalMemo = vocalMemoRepository.save(vocalMemo);
 
-    response.setId(vocalMemo.getId());
-    response.setNomeRegistrazione(vocalMemo.getNomeRegistrazione());
-    response.setDataInserimento(vocalMemo.getDataInserimento());
-    response.setUserId(vocalMemo.getUser().getId());
-    response.setPlaylistId(vocalMemo.getPlaylist().getId());
-    return response;
+        return new VocalMemoResponse(
+                savedVocalMemo.getId(),
+                savedVocalMemo.getNomeRegistrazione(),
+                savedVocalMemo.getDataInserimento(),
+                savedVocalMemo.getUser().getId(),
+                savedVocalMemo.getPlaylist() != null ? savedVocalMemo.getPlaylist().getId() : null // Ora gestisce il caso null
+        );
     }
 
     //GET

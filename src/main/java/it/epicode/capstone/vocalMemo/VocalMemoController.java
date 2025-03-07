@@ -1,6 +1,8 @@
 package it.epicode.capstone.vocalMemo;
 
 import it.epicode.capstone.authentication.AppUser;
+import it.epicode.capstone.playlists.Playlist;
+import it.epicode.capstone.playlists.PlaylistRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -15,16 +18,26 @@ import java.util.List;
 @RequestMapping("api/vocalmemo")
 @PreAuthorize("hasRole('ROLE_USER')")
 public class VocalMemoController {
+
     private final VocalMemoService service;
     private final VocalMemoRepository vocalMemoRepository;
+    private final PlaylistRepository playlistRepository; // Repository per le playlist
 
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.CREATED)
-    public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request, @RequestParam Long playlistId,
-                                  @AuthenticationPrincipal AppUser user)  {
-    return service.save(request, playlistId, user);
+    public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request,
+                                  @AuthenticationPrincipal AppUser user) {
+        Playlist playlist = null;
+
+        if (request.getPlaylistId() != null) {
+            playlist = playlistRepository.findById(request.getPlaylistId())
+                    .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
+        }
+
+        return service.save(request, playlist, user);
     }
+
 
     @GetMapping("")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -59,16 +72,4 @@ public class VocalMemoController {
     public void delete(@PathVariable Long id)  {
         service.delete(id);
     }
-
-    //GET PER AUDIO
-    @GetMapping("/{id}/registrazione")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @ResponseStatus(HttpStatus.OK)
-    public byte[] getRegistrazione(@PathVariable Long id)  {
-        VocalMemo vocalMemo = vocalMemoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("VocalMemo non trovato, ID " + id));
-        return vocalMemo.getRegistrazione();
-
-    }
-
 }

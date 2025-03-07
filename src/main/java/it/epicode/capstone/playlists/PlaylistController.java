@@ -19,7 +19,7 @@ public class PlaylistController {
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.CREATED)
-    public PlaylistResponse save(@Valid @RequestBody PlaylistRequest request, @AuthenticationPrincipal AppUser user) {
+    public PlaylistResponse save(@Valid PlaylistRequest request, @AuthenticationPrincipal AppUser user) {
         return playlistService.save(request, user);
     }
 
