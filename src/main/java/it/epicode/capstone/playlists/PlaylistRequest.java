@@ -1,6 +1,5 @@
 package it.epicode.capstone.playlists;
 
-import it.epicode.capstone.vocalMemo.VocalMemo;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;

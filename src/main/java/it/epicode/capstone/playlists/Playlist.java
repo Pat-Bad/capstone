@@ -28,7 +28,7 @@ public class Playlist {
     @Column(name = "youtube_url")
     private List<String> youtubeUrls = new ArrayList<>(); //inizializzo per evitare nullpointer
 
-   @OneToOne (fetch = FetchType.LAZY, mappedBy = "playlist")
+    @OneToOne (fetch = FetchType.LAZY, mappedBy = "playlist")
     private VocalMemo vocalMemo;
 
     @ManyToOne(fetch = FetchType.LAZY)

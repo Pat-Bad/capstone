@@ -2,20 +2,16 @@ package it.epicode.capstone.playlists;
 
 import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.authentication.AppUserRepository;
-import it.epicode.capstone.vocalMemo.VocalMemo;
 import it.epicode.capstone.vocalMemo.VocalMemoRepository;
-import it.epicode.capstone.vocalMemo.VocalMemoResponse;
 import it.epicode.capstone.youtube.AddVideoToPlaylistRequest;
 import it.epicode.capstone.youtube.RemoveVideoRequest;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +36,6 @@ public class PlaylistService {
         response.setNomePlaylist(playlist.getNomePlaylist());
         response.setYoutubeUrls(playlist.getYoutubeUrls());
 
-
         return response;
     }
 
@@ -57,7 +52,6 @@ public class PlaylistService {
         response.setNomePlaylist(playlist.getNomePlaylist());
         response.setYoutubeUrls(playlist.getYoutubeUrls());
 
-
         return response;
     }
 
@@ -67,14 +61,13 @@ public class PlaylistService {
         repository.deleteById(id);
     }
 
-
     public List<Playlist> findAll() {
         return repository.findAll();
     }
 
     public Playlist findById(Long id) {
         Playlist playlist = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata con id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
         return playlist;
     }
 
@@ -92,7 +85,6 @@ public class PlaylistService {
         response.setNomePlaylist(playlist.getNomePlaylist());
         response.setYoutubeUrls(playlist.getYoutubeUrls());
 
-
         return response;
     }
 
@@ -102,10 +94,11 @@ public class PlaylistService {
         playlist.getYoutubeUrls().remove(request.getYoutubeUrl());
         repository.save(playlist);
 
-        return new PlaylistResponse(
-                playlist.getId(),
-                playlist.getNomePlaylist(),
-                playlist.getYoutubeUrls());
+        PlaylistResponse response = new PlaylistResponse();
+        response.setId(playlist.getId());
+        response.setNomePlaylist(playlist.getNomePlaylist());
+        response.setYoutubeUrls(playlist.getYoutubeUrls());
 
+        return response;
     }
 }

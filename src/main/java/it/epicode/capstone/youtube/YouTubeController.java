@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -17,8 +16,7 @@ public class YouTubeController {
     private final PlaylistService playlistService;
 
     @GetMapping("/search")
-    public List<YouTubeVideoResponse> searchVideos(@RequestParam String query) throws ErrorResponseException {
-
+    public List<YouTubeVideoResponse> searchVideos(@RequestParam String query){
         return youTubeService.searchVideos(query);
     }
 

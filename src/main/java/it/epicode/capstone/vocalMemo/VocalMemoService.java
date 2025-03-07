@@ -4,19 +4,15 @@ import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.authentication.AppUserRepository;
 import it.epicode.capstone.playlists.Playlist;
 import it.epicode.capstone.playlists.PlaylistRepository;
-import it.epicode.capstone.playlists.PlaylistResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.List;
-
 
 @Service
 @Validated
@@ -28,20 +24,19 @@ public class VocalMemoService {
 
 //POST
 @Transactional
-public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request, Long playlistId, AppUser user) {
-//creo la vocalmemo
+public VocalMemoResponse save(@Valid VocalMemoRequest request, Long playlistId, AppUser user) {
+
     VocalMemo vocalMemo = new VocalMemo();
     vocalMemo.setNomeRegistrazione(request.getNomeRegistrazione());
     vocalMemo.setUser(user);
     vocalMemo.setRegistrazione(request.getRegistrazione());
     //devo trovare la playlist con l'id
     Playlist playlist = playlistRepository.findById(playlistId)
-            .orElseThrow(() -> new EntityNotFoundException("Playlist not found with id: " + playlistId));
+            .orElseThrow(() -> new EntityNotFoundException("Playlist not found " + playlistId));
     vocalMemo.setPlaylist(playlist);
     //salvo la vocalmemo
     VocalMemo savedVocalMemo = vocalMemoRepository.save(vocalMemo);
     //creo la response
-
 
    VocalMemoResponse response = new VocalMemoResponse();
 
@@ -53,7 +48,7 @@ public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request, Long
     return response;
     }
 
-//GET
+    //GET
     public VocalMemo findById(Long id) {
         return vocalMemoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("VocalMemo non trovato con id: " + id));
@@ -74,8 +69,7 @@ public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request, Long
     }
 
     public List<VocalMemo> findAll() {
-        List<VocalMemo> vocalMemos = vocalMemoRepository.findAll();
-        return vocalMemos;
+        return vocalMemoRepository.findAll();
     }
 }
 

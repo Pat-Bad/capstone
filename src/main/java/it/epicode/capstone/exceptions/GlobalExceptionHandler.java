@@ -1,6 +1,5 @@
 package it.epicode.capstone.exceptions;
 
-
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;

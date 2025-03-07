@@ -1,7 +1,4 @@
 package it.epicode.capstone.playlists;
-
-import it.epicode.capstone.vocalMemo.VocalMemo;
-import it.epicode.capstone.vocalMemo.VocalMemoResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

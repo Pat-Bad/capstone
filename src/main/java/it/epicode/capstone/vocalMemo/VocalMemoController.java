@@ -5,13 +5,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,14 +20,14 @@ public class VocalMemoController {
 
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_USER')")
-@ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED)
     public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request, @RequestParam Long playlistId,
                                   @AuthenticationPrincipal AppUser user)  {
-return service.save(request, playlistId, user);
+    return service.save(request, playlistId, user);
     }
 
     @GetMapping("")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public List<VocalMemo> findAll() {
         return service.findAll();
@@ -40,8 +36,14 @@ return service.save(request, playlistId, user);
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
-    public VocalMemo findById(@PathVariable Long id)  {
-        return service.findById(id);
+    public VocalMemoResponse findById(@PathVariable Long id)  {
+        VocalMemo vocalMemo = service.findById(id);
+        return new VocalMemoResponse(
+                vocalMemo.getId(),
+                vocalMemo.getNomeRegistrazione(),
+                vocalMemo.getDataInserimento(),
+                vocalMemo.getUser().getId(),
+                vocalMemo.getPlaylist().getId());
     }
 
     @PutMapping("/{id}")
@@ -69,4 +71,4 @@ return service.save(request, playlistId, user);
 
     }
 
-    }
+}
