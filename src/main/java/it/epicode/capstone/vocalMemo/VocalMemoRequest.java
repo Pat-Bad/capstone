@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class VocalMemoRequest {
 
     @NotNull(message="Ricordati di inserire la registrazione")
-    private byte[] registrazione;
+    private String registrazione;
 
     @NotBlank(message="Dai un titolo alla registrazione")
     private String nomeRegistrazione;

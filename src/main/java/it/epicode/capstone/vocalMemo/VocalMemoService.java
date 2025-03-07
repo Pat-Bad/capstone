@@ -29,7 +29,7 @@ public VocalMemoResponse save(@Valid VocalMemoRequest request, Long playlistId, 
     VocalMemo vocalMemo = new VocalMemo();
     vocalMemo.setNomeRegistrazione(request.getNomeRegistrazione());
     vocalMemo.setUser(user);
-    vocalMemo.setRegistrazione(request.getRegistrazione());
+    vocalMemo.setRegistrazione(request.getRegistrazione().getBytes());
     //devo trovare la playlist con l'id
     Playlist playlist = playlistRepository.findById(playlistId)
             .orElseThrow(() -> new EntityNotFoundException("Playlist not found " + playlistId));
