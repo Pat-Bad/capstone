@@ -9,10 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface VocalMemoRepository extends JpaRepository<VocalMemo, Long> {
-
-    List<VocalMemo> findByUser_Id(Long userId);
-
     List<VocalMemo> findByUser(AppUser user);
 
-    List<VocalMemo> findAllByUser(AppUser user);
+
 }

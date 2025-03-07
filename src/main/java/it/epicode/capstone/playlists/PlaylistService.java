@@ -29,7 +29,7 @@ public class PlaylistService {
 
     //POST
     @Transactional
-    public PlaylistResponse save(@Valid PlaylistRequest request, @AuthenticationPrincipal AppUser user) {
+    public PlaylistResponse save(@Valid PlaylistRequest request, AppUser user) {
         Playlist playlist = new Playlist();
         BeanUtils.copyProperties(request, playlist);
         playlist.setUser(user);
@@ -80,7 +80,10 @@ public class PlaylistService {
 
     public PlaylistResponse addVideoToPlaylist(@Valid AddVideoToPlaylistRequest request) {
         Playlist playlist = repository.findById(request.getPlaylistId())
-                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata " + request.getPlaylistId()));
+                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
+        if (playlist.getYoutubeUrls() == null) {
+            playlist.setYoutubeUrls(new ArrayList<>());
+        }
         playlist.getYoutubeUrls().add(request.getYoutubeUrl());
         repository.save(playlist);
 
@@ -91,5 +94,18 @@ public class PlaylistService {
 
 
         return response;
+    }
+
+    public PlaylistResponse removeVideoFromPlaylist(@Valid RemoveVideoRequest request) {
+        Playlist playlist = repository.findById(request.getPlaylistId())
+                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
+        playlist.getYoutubeUrls().remove(request.getYoutubeUrl());
+        repository.save(playlist);
+
+        return new PlaylistResponse(
+                playlist.getId(),
+                playlist.getNomePlaylist(),
+                playlist.getYoutubeUrls());
+
     }
 }

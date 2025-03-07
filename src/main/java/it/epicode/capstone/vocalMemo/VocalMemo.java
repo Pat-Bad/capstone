@@ -29,7 +29,7 @@ public class VocalMemo {
     private String nomeRegistrazione;
 
     @OneToOne
-    @JoinColumn(name = "playlist_id", nullable = false)
+    @JoinColumn(name = "playlist_id", nullable = true)
     private Playlist playlist;
 
     @ManyToOne(fetch = FetchType.LAZY)

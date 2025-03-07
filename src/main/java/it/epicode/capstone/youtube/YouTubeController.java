@@ -18,12 +18,18 @@ public class YouTubeController {
 
     @GetMapping("/search")
     public List<YouTubeVideoResponse> searchVideos(@RequestParam String query) throws ErrorResponseException {
+
         return youTubeService.searchVideos(query);
     }
 
     @PostMapping("/add-video")
     public PlaylistResponse addVideoToPlaylist(@RequestBody @Valid AddVideoToPlaylistRequest request) {
         return playlistService.addVideoToPlaylist(request);
+    }
+
+    @DeleteMapping("/remove-video")
+    public PlaylistResponse removeVideoFromPlaylist(@RequestBody @Valid RemoveVideoRequest request) {
+        return playlistService.removeVideoFromPlaylist(request);
     }
 
 }

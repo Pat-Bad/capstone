@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -27,11 +28,12 @@ public class VocalMemoService {
 
 //POST
 @Transactional
-public VocalMemoResponse save(@Valid VocalMemoRequest request, Long playlistId, @AuthenticationPrincipal AppUser user) {
+public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request, Long playlistId, AppUser user) {
 //creo la vocalmemo
     VocalMemo vocalMemo = new VocalMemo();
     vocalMemo.setNomeRegistrazione(request.getNomeRegistrazione());
     vocalMemo.setUser(user);
+    vocalMemo.setRegistrazione(request.getRegistrazione());
     //devo trovare la playlist con l'id
     Playlist playlist = playlistRepository.findById(playlistId)
             .orElseThrow(() -> new EntityNotFoundException("Playlist not found with id: " + playlistId));

@@ -20,7 +20,7 @@ public class PlaylistController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public PlaylistResponse save(@Valid PlaylistRequest request, @AuthenticationPrincipal AppUser user) {
+    public PlaylistResponse save(@Valid @RequestBody PlaylistRequest request, @AuthenticationPrincipal AppUser user) {
         return playlistService.save(request, user);
     }
 
@@ -39,7 +39,7 @@ public class PlaylistController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PlaylistResponse update(@PathVariable Long id, @Valid PlaylistRequest request) {
+    public PlaylistResponse update(@PathVariable Long id, @Valid @RequestBody PlaylistRequest request) {
         return playlistService.update(id, request);
     }
 
@@ -48,5 +48,7 @@ public class PlaylistController {
     public void delete(@PathVariable Long id) {
         playlistService.delete(id);
     }
+
+
 
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +25,8 @@ public class VocalMemoController {
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_USER')")
 @ResponseStatus(HttpStatus.CREATED)
-    public VocalMemoResponse save(@Valid VocalMemoRequest request, Long playlistId, @AuthenticationPrincipal AppUser user)  {
+    public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request, @RequestParam Long playlistId,
+                                  @AuthenticationPrincipal AppUser user)  {
 return service.save(request, playlistId, user);
     }
 
@@ -45,7 +47,7 @@ return service.save(request, playlistId, user);
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
-    public VocalMemo update(@PathVariable Long id, @Valid VocalMemoRequest request)  {
+    public VocalMemo update(@PathVariable Long id, @Valid @RequestBody VocalMemoRequest request)  {
         return service.update(id, request);
     }
 
@@ -56,6 +58,15 @@ return service.save(request, playlistId, user);
         service.delete(id);
     }
 
+    //GET PER AUDIO
+    @GetMapping("/{id}/registrazione")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @ResponseStatus(HttpStatus.OK)
+    public byte[] getRegistrazione(@PathVariable Long id)  {
+        VocalMemo vocalMemo = vocalMemoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("VocalMemo non trovato, ID " + id));
+        return vocalMemo.getRegistrazione();
 
+    }
 
-}
+    }
