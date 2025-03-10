@@ -26,19 +26,19 @@ public class PlaylistService {
     //POST
     @Transactional
     public PlaylistResponse save(@Valid PlaylistRequest request, AppUser user) {
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
         Playlist playlist = new Playlist();
         playlist.setNomePlaylist(request.getNomePlaylist());
         playlist.setYoutubeUrls(request.getYoutubeUrls());
         playlist.setUser(user);
         playlist = repository.save(playlist);
-        System.out.println("Controller received request: " + request);
-        System.out.println("User: " + user);
 
         PlaylistResponse response = new PlaylistResponse();
         response.setId(playlist.getId());
         response.setNomePlaylist(playlist.getNomePlaylist());
         response.setYoutubeUrls(playlist.getYoutubeUrls());
-
 
         return response;
     }

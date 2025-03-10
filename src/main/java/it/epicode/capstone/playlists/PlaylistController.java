@@ -22,8 +22,10 @@ public class PlaylistController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.CREATED)
     public PlaylistResponse save(@Valid @RequestBody PlaylistRequest request, @AuthenticationPrincipal AppUser user) {
+        System.out.println("Request received: " + request);
         return playlistService.save(request, user);
     }
+
     @GetMapping("")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
