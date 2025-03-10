@@ -1,5 +1,7 @@
 package it.epicode.capstone.playlists;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.authentication.AppUserRepository;
 import it.epicode.capstone.vocalMemo.VocalMemoRepository;
@@ -24,6 +26,7 @@ public class PlaylistService {
     private final AppUserRepository userRepository;
 
     //POST
+
     @Transactional
     public PlaylistResponse save(@Valid PlaylistRequest request, AppUser user) {
         if (user == null) {
@@ -31,7 +34,11 @@ public class PlaylistService {
         }
         Playlist playlist = new Playlist();
         playlist.setNomePlaylist(request.getNomePlaylist());
-        playlist.setYoutubeUrls(request.getYoutubeUrls());
+
+        // Assicurati che youtubeUrls sia una lista di stringhe
+        List<String> youtubeUrls = request.getYoutubeUrls();
+        playlist.setYoutubeUrls(youtubeUrls);
+
         playlist.setUser(user);
         playlist = repository.save(playlist);
 
@@ -65,7 +72,7 @@ public class PlaylistService {
         repository.deleteById(id);
     }
 
-    public List<Playlist> findAll() {
+    public List<Playlist> findAll(AppUser user) {
         return repository.findAll();
     }
 

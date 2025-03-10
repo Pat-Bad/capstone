@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -14,5 +15,6 @@ import java.util.List;
 public class PlaylistRequest {
     @NotBlank(message="Dai un nome alla tua playlist")
     private String nomePlaylist;
-    private List<String> youtubeUrls;
+    List<String> youtubeUrls = new ArrayList<>();
+
 }

@@ -27,10 +27,11 @@ public class PlaylistController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
-    public List<Playlist> findAll() {
-        return playlistService.findAll();
+    public List<Playlist> findAll(@AuthenticationPrincipal AppUser user) {
+
+        return playlistService.findAll(user);
     }
 
     @GetMapping("/{id}")
