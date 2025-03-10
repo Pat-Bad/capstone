@@ -26,24 +26,31 @@ public class VocalMemoService {
 //POST
 
     public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request,
-                                  Playlist playlist,
                                   @AuthenticationPrincipal AppUser user) {
+        // Crea un oggetto VocalMemo
         VocalMemo vocalMemo = new VocalMemo();
         vocalMemo.setUser(user);
-        vocalMemo.setPlaylist(playlist);
-        vocalMemo.setUrl(request.getUrl()); // Aggiunto per salvare il file audio
-        vocalMemo.setNomeRegistrazione("Memo di " + user.getUsername()); // Nome predefinito
+        Playlist playlistId = playlistRepository.findById(request.getPlaylistId())
+                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
+        vocalMemo.setPlaylist(playlistId);
+        vocalMemo.setUrl(request.getUrl());
 
+        // Imposta un nome di registrazione di default
+        vocalMemo.setNomeRegistrazione("Memo di " + user.getUsername());
+
+        // Salva l'oggetto nel database
         VocalMemo savedVocalMemo = vocalMemoRepository.save(vocalMemo);
 
+        // Crea e restituisce la risposta
         return new VocalMemoResponse(
-                savedVocalMemo.getId(),
+                savedVocalMemo.getId(),  // ID generato automaticamente dal DB
                 savedVocalMemo.getNomeRegistrazione(),
                 savedVocalMemo.getDataInserimento(),
                 savedVocalMemo.getUser().getId(),
-                savedVocalMemo.getPlaylist() != null ? savedVocalMemo.getPlaylist().getId() : null // Ora gestisce il caso null
+                savedVocalMemo.getPlaylist().getId()
         );
     }
+
 
     //GET
     public VocalMemo findById(Long id) {

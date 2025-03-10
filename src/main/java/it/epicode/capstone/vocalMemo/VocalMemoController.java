@@ -22,21 +22,29 @@ public class VocalMemoController {
     private final VocalMemoService service;
     private final VocalMemoRepository vocalMemoRepository;
     private final PlaylistRepository playlistRepository; // Repository per le playlist
-
     @PostMapping("")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.CREATED)
+
     public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request,
                                   @AuthenticationPrincipal AppUser user) {
-        Playlist playlist = null;
-
-        if (request.getPlaylistId() != null) {
-            playlist = playlistRepository.findById(request.getPlaylistId())
-                    .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
-        }
-
-        return service.save(request, playlist, user);
+        return service.save(request, user);
     }
+
+//    @PostMapping("")
+//    @PreAuthorize("hasRole('ROLE_USER')")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request,
+//                                  @AuthenticationPrincipal AppUser user) {
+//        Playlist playlist = null;
+//
+//        if (request.getPlaylistId() != null) {
+//            playlist = playlistRepository.findById(request.getPlaylistId())
+//                    .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
+//        }
+//
+//        return service.save(request, playlist, user);
+//    }
 
 
     @GetMapping("")

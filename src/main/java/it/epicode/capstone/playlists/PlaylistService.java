@@ -27,7 +27,8 @@ public class PlaylistService {
     @Transactional
     public PlaylistResponse save(@Valid PlaylistRequest request, AppUser user) {
         Playlist playlist = new Playlist();
-        BeanUtils.copyProperties(request, playlist);
+        playlist.setNomePlaylist(request.getNomePlaylist());
+        playlist.setYoutubeUrls(request.getYoutubeUrls());
         playlist.setUser(user);
         playlist = repository.save(playlist);
 
@@ -35,6 +36,8 @@ public class PlaylistService {
         response.setId(playlist.getId());
         response.setNomePlaylist(playlist.getNomePlaylist());
         response.setYoutubeUrls(playlist.getYoutubeUrls());
+        System.out.println("Controller received request: " + request);
+        System.out.println("User: " + user);
 
         return response;
     }
