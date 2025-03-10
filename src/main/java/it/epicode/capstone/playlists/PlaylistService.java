@@ -64,9 +64,20 @@ public class PlaylistService {
         repository.deleteById(id);
     }
 
-    public List<Playlist> findAll(AppUser user) {
-        return repository.findAll();
+
+    public List<PlaylistResponse> findAllByUser(AppUser user) {
+        List<Playlist> playlists = repository.findAllByUser(user);
+        List<PlaylistResponse> playlistResponses = new ArrayList<>();
+        for (Playlist playlist : playlists) {
+            PlaylistResponse playlistResponse = new PlaylistResponse();
+            playlistResponse.setId(playlist.getId());
+            playlistResponse.setNomePlaylist(playlist.getNomePlaylist());
+            playlistResponse.setYoutubeUrls(playlist.getYoutubeUrls());
+            playlistResponses.add(playlistResponse);
+        }
+        return playlistResponses;
     }
+
 
     public Playlist findById(Long id) {
         Playlist playlist = repository.findById(id)

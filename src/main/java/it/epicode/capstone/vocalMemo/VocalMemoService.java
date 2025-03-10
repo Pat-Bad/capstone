@@ -58,6 +58,10 @@ public class VocalMemoService {
                 .orElseThrow(() -> new EntityNotFoundException("VocalMemo non trovato con id: " + id));
     }
 
+    public List<Playlist> findAllByUser(AppUser user) {
+        return playlistRepository.findAllByUser(user);
+    }
+
     //PUT
     public VocalMemo update(Long id, @Valid VocalMemoRequest request) {
         VocalMemo vocalMemo = findById(id);

@@ -1,5 +1,6 @@
 package it.epicode.capstone.authentication;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.epicode.capstone.playlists.Playlist;
 import it.epicode.capstone.vocalMemo.VocalMemo;
 import jakarta.persistence.*;
@@ -42,7 +43,8 @@ public class AppUser implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<VocalMemo> vocalMemos;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Playlist> playlists;
 
 

@@ -1,5 +1,7 @@
 package it.epicode.capstone.playlists;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.vocalMemo.VocalMemo;
 import jakarta.persistence.*;
@@ -28,7 +30,8 @@ public class Playlist {
     @OneToOne (fetch = FetchType.LAZY, mappedBy = "playlist")
     private VocalMemo vocalMemo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private AppUser user;
 }

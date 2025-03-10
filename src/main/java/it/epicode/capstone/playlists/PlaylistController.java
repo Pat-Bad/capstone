@@ -4,7 +4,6 @@ import it.epicode.capstone.authentication.AppUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +28,9 @@ public class PlaylistController {
     @GetMapping("")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
-    public List<Playlist> findAll(@AuthenticationPrincipal AppUser user) {
+    public List<PlaylistResponse> findAllByUser(@AuthenticationPrincipal AppUser user) {
 
-        return playlistService.findAll(user);
+        return playlistService.findAllByUser(user);
     }
 
     @GetMapping("/{id}")
