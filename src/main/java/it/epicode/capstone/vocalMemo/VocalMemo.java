@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
 
 @Entity
@@ -19,16 +20,18 @@ public class VocalMemo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob  //LARGE OBJECT
-    private byte[] registrazione;  // Dato binario per la registrazione vocale
+    private String url;
 
+    @CreationTimestamp
     private LocalDate dataInserimento;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    private String nomeRegistrazione;
+
+    @OneToOne
     @JoinColumn(name = "playlist_id", nullable = true)
     private Playlist playlist;
 
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private AppUser user;
 }

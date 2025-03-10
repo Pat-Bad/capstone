@@ -39,10 +39,12 @@ public class AppUser implements UserDetails {
     private  boolean credentialsNonExpired=true;
     private  boolean enabled=true;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<VocalMemo> vocalMemos;
-    @OneToMany(mappedBy = "user")
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Playlist> playlists;
+
 
     private String email;
 
