@@ -23,10 +23,7 @@ public class Playlist {
     @Column(nullable = false)
     private String nomePlaylist;
 
-    @ElementCollection //Relazione onetomany per tipi simple, non entità a sé. Crea la tabella con solo gli url
-    @CollectionTable(name = "playlist_youtube_urls", joinColumns = @JoinColumn(name = "playlist_id"))
-    @Column(name = "youtube_url")
-    private List<String> youtubeUrls = new ArrayList<>(); //inizializzo per evitare nullpointer
+    private List<String> youtubeUrls = new ArrayList<>();
 
     @OneToOne (fetch = FetchType.LAZY, mappedBy = "playlist")
     private VocalMemo vocalMemo;

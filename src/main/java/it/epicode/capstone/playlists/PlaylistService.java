@@ -29,16 +29,9 @@ public class PlaylistService {
 
     @Transactional
     public PlaylistResponse save(@Valid PlaylistRequest request, AppUser user) {
-        if (user == null) {
-            throw new RuntimeException("User not found");
-        }
         Playlist playlist = new Playlist();
         playlist.setNomePlaylist(request.getNomePlaylist());
-
-        // Assicurati che youtubeUrls sia una lista di stringhe
-        List<String> youtubeUrls = request.getYoutubeUrls();
-        playlist.setYoutubeUrls(youtubeUrls);
-
+        playlist.setYoutubeUrls(request.getYoutubeUrls());
         playlist.setUser(user);
         playlist = repository.save(playlist);
 
@@ -46,7 +39,6 @@ public class PlaylistService {
         response.setId(playlist.getId());
         response.setNomePlaylist(playlist.getNomePlaylist());
         response.setYoutubeUrls(playlist.getYoutubeUrls());
-
         return response;
     }
 
