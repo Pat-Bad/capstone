@@ -43,11 +43,12 @@ public class VocalMemoService {
 
         // Crea e restituisce la risposta
         return new VocalMemoResponse(
-                savedVocalMemo.getId(),  // ID generato automaticamente dal DB
+                savedVocalMemo.getId(),
                 savedVocalMemo.getNomeRegistrazione(),
                 savedVocalMemo.getDataInserimento(),
                 savedVocalMemo.getUser().getId(),
-                savedVocalMemo.getPlaylist().getId()
+                savedVocalMemo.getPlaylist().getId(),
+                savedVocalMemo.getUrl()
         );
     }
 
@@ -78,6 +79,10 @@ public class VocalMemoService {
 
     public List<VocalMemo> findAll() {
         return vocalMemoRepository.findAll();
+    }
+
+    public VocalMemo findByPlaylistId(Long playlistId) {
+        return vocalMemoRepository.findByPlaylistId(playlistId);
     }
 }
 

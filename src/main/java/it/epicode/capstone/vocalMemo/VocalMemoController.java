@@ -7,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -47,25 +48,34 @@ public class VocalMemoController {
 //    }
 
 
-    @GetMapping("")
+   @GetMapping("")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
-    public List<VocalMemo> findAll() {
-        return service.findAll();
+   public List<VocalMemo> findAll() {
+       return service.findAll();
     }
 
-    @GetMapping("/{id}")
+
+    @GetMapping("/{playlistId}")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
-    public VocalMemoResponse findById(@PathVariable Long id)  {
-        VocalMemo vocalMemo = service.findById(id);
-        return new VocalMemoResponse(
-                vocalMemo.getId(),
-                vocalMemo.getNomeRegistrazione(),
-                vocalMemo.getDataInserimento(),
-                vocalMemo.getUser().getId(),
-                vocalMemo.getPlaylist().getId());
+    public ResponseEntity<VocalMemoResponse> getVocalMemo(@PathVariable Long playlistId) {
+        VocalMemo vocalMemo = service.findByPlaylistId(playlistId);
+        if (vocalMemo != null) {
+            VocalMemoResponse response = new VocalMemoResponse(
+                    vocalMemo.getId(),
+                    vocalMemo.getNomeRegistrazione(),
+                    vocalMemo.getDataInserimento(),
+                    vocalMemo.getUser().getId(),
+                    vocalMemo.getPlaylist().getId(),
+                    vocalMemo.getUrl()
+            );
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -81,3 +91,4 @@ public class VocalMemoController {
         service.delete(id);
     }
 }
+

@@ -12,4 +12,5 @@ public interface VocalMemoRepository extends JpaRepository<VocalMemo, Long> {
     List<VocalMemo> findByUser(AppUser user);
 
 
+    VocalMemo findByPlaylistId(Long playlistId);
 }
