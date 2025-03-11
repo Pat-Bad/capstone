@@ -1,9 +1,7 @@
 package it.epicode.capstone.vocalMemo;
 
 import it.epicode.capstone.authentication.AppUser;
-import it.epicode.capstone.playlists.Playlist;
 import it.epicode.capstone.playlists.PlaylistRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -65,7 +63,6 @@ public class VocalMemoController {
             VocalMemoResponse response = new VocalMemoResponse(
                     vocalMemo.getId(),
                     vocalMemo.getNomeRegistrazione(),
-                    vocalMemo.getDataInserimento(),
                     vocalMemo.getUser().getId(),
                     vocalMemo.getPlaylist().getId(),
                     vocalMemo.getUrl()

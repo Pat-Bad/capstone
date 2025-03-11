@@ -29,27 +29,18 @@ public class VocalMemoService {
                                   @AuthenticationPrincipal AppUser user) {
         // Crea un oggetto VocalMemo
         VocalMemo vocalMemo = new VocalMemo();
-        vocalMemo.setUser(user);
-        Playlist playlistId = playlistRepository.findById(request.getPlaylistId())
-                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
-        vocalMemo.setPlaylist(playlistId);
         vocalMemo.setUrl(request.getUrl());
-
-        // Imposta un nome di registrazione di default
+        vocalMemo.setUser(user);
+        Playlist playlist = playlistRepository.findById(request.getPlaylistId())
+                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
+        vocalMemo.setPlaylist(playlist);
         vocalMemo.setNomeRegistrazione("Memo di " + user.getUsername());
 
         // Salva l'oggetto nel database
         VocalMemo savedVocalMemo = vocalMemoRepository.save(vocalMemo);
 
-        // Crea e restituisce la risposta
-        return new VocalMemoResponse(
-                savedVocalMemo.getId(),
-                savedVocalMemo.getNomeRegistrazione(),
-                savedVocalMemo.getDataInserimento(),
-                savedVocalMemo.getUser().getId(),
-                savedVocalMemo.getPlaylist().getId(),
-                savedVocalMemo.getUrl()
-        );
+        return new VocalMemoResponse(savedVocalMemo.getId(), savedVocalMemo.getNomeRegistrazione(), savedVocalMemo.getUser().getId(),
+                savedVocalMemo.getPlaylist().getId(), savedVocalMemo.getUrl());
     }
 
 

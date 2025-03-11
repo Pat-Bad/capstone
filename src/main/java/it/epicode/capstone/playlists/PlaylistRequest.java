@@ -1,5 +1,6 @@
 package it.epicode.capstone.playlists;
 
+import it.epicode.capstone.vocalMemo.VocalMemo;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,5 +17,6 @@ public class PlaylistRequest {
     @NotBlank(message="Dai un nome alla tua playlist")
     private String nomePlaylist;
     List<String> youtubeUrls = new ArrayList<>();
+    VocalMemo vocalMemo;
 
 }

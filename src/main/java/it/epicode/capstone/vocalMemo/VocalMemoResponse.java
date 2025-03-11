@@ -13,8 +13,8 @@ public class VocalMemoResponse {
 
     private Long id;
     private String nomeRegistrazione;
-    private LocalDate dataInserimento;
     private Long userId;
     private Long playlistId;
     private String url;
+
 }

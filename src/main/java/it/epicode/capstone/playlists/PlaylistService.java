@@ -33,12 +33,14 @@ public class PlaylistService {
         playlist.setNomePlaylist(request.getNomePlaylist());
         playlist.setYoutubeUrls(request.getYoutubeUrls());
         playlist.setUser(user);
+        playlist.setVocalMemo(request.getVocalMemo());
         playlist = repository.save(playlist);
 
         PlaylistResponse response = new PlaylistResponse();
         response.setId(playlist.getId());
         response.setNomePlaylist(playlist.getNomePlaylist());
         response.setYoutubeUrls(playlist.getYoutubeUrls());
+        response.setVocalMemo(playlist.getVocalMemo());
         return response;
     }
 

@@ -13,4 +13,5 @@ public class VocalMemoRequest {
     @NotNull(message="Ricordati di inserire la registrazione")
     private String url;
     private Long playlistId;
+    private Long userId;
 }
