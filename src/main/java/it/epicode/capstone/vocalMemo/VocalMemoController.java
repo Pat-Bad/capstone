@@ -1,6 +1,7 @@
 package it.epicode.capstone.vocalMemo;
 
 import it.epicode.capstone.authentication.AppUser;
+import it.epicode.capstone.playlists.Playlist;
 import it.epicode.capstone.playlists.PlaylistRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,11 +47,11 @@ public class VocalMemoController {
 //    }
 
 
-   @GetMapping("")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
-   public List<VocalMemo> findAll() {
-       return service.findAll();
+   public List<VocalMemoResponse> findAllByUser(@AuthenticationPrincipal AppUser user) {
+        return service.findByUser(user);
     }
 
 

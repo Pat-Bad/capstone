@@ -68,8 +68,12 @@ public class VocalMemoService {
         vocalMemoRepository.delete(vocalMemo);
     }
 
-    public List<VocalMemo> findAll() {
-        return vocalMemoRepository.findAll();
+
+
+
+
+    public List<VocalMemoResponse> findByUser(AppUser user) {
+        return vocalMemoRepository.findByUser(user);
     }
 
     public VocalMemo findByPlaylistId(Long playlistId) {
