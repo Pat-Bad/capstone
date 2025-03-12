@@ -39,8 +39,8 @@ public class VocalMemoService {
         // Salva l'oggetto nel database
         VocalMemo savedVocalMemo = vocalMemoRepository.save(vocalMemo);
 
-        return new VocalMemoResponse(savedVocalMemo.getId(), savedVocalMemo.getNomeRegistrazione(), savedVocalMemo.getUser().getId(),
-                savedVocalMemo.getPlaylist().getId(), savedVocalMemo.getUrl());
+        return new VocalMemoResponse(savedVocalMemo.getId(), savedVocalMemo.getNomeRegistrazione(), savedVocalMemo.getDataRegistrazione(),
+                savedVocalMemo.getUser().getId(), savedVocalMemo.getPlaylist().getId(), savedVocalMemo.getUrl());
     }
 
 

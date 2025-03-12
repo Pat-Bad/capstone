@@ -66,6 +66,7 @@ public class VocalMemoController {
             VocalMemoResponse response = new VocalMemoResponse(
                     vocalMemo.getId(),
                     vocalMemo.getNomeRegistrazione(),
+                    vocalMemo.getDataRegistrazione(),
                     vocalMemo.getUser().getId(),
                     vocalMemo.getPlaylist().getId(),
                     vocalMemo.getUrl()

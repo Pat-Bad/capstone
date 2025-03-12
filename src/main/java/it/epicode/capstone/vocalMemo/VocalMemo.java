@@ -21,7 +21,8 @@ public class VocalMemo {
     private Long id;
 
     private String url;
-
+@CreationTimestamp
+private LocalDate dataRegistrazione;
     private String nomeRegistrazione;
 
     @OneToOne
