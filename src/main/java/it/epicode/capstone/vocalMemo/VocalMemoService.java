@@ -79,5 +79,9 @@ public class VocalMemoService {
     public VocalMemo findByPlaylistId(Long playlistId) {
         return vocalMemoRepository.findByPlaylistId(playlistId);
     }
+
+    public VocalMemo save(VocalMemo vocalMemo) {
+        return vocalMemoRepository.save(vocalMemo);
+    }
 }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.authentication.AppUserRepository;
+import it.epicode.capstone.vocalMemo.VocalMemo;
 import it.epicode.capstone.vocalMemo.VocalMemoRepository;
 import it.epicode.capstone.youtube.AddVideoToPlaylistRequest;
 import it.epicode.capstone.youtube.RemoveVideoRequest;
@@ -40,7 +41,7 @@ public class PlaylistService {
         response.setId(playlist.getId());
         response.setNomePlaylist(playlist.getNomePlaylist());
         response.setYoutubeUrls(playlist.getYoutubeUrls());
-        response.setVocalMemo(playlist.getVocalMemo());
+        response.setUrl(playlist.getVocalMemo().getUrl());
         return response;
     }
 
@@ -81,10 +82,19 @@ public class PlaylistService {
     }
 
 
-    public Playlist findById(Long id) {
+    public PlaylistResponse findById(Long id) {
         Playlist playlist = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata"));
-        return playlist;
+                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + id));
+        VocalMemo vocalMemo = vocalMemoRepository.findByPlaylistId(id);
+        PlaylistResponse response = new PlaylistResponse();
+        response.setId(playlist.getId());
+        response.setNomePlaylist(playlist.getNomePlaylist());
+        response.setYoutubeUrls(playlist.getYoutubeUrls());
+
+        if (vocalMemo != null) {
+            response.setUrl(vocalMemo.getUrl());
+        } else {response.setUrl(null);}
+        return response;
     }
 
     public PlaylistResponse addVideoToPlaylist(@Valid AddVideoToPlaylistRequest request) {
@@ -116,5 +126,9 @@ public class PlaylistService {
         response.setYoutubeUrls(playlist.getYoutubeUrls());
 
         return response;
+    }
+
+    public Playlist save(Playlist playlist) {
+        return repository.save(playlist);
     }
 }

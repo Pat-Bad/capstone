@@ -27,7 +27,8 @@ public class Playlist {
 
     private List<String> youtubeUrls = new ArrayList<>();
 
-    @OneToOne (fetch = FetchType.LAZY, mappedBy = "playlist")
+    @OneToOne
+    @JoinColumn (name = "vocal_memo_id", nullable = true)
     private VocalMemo vocalMemo;
 
     @ManyToOne(fetch = FetchType.EAGER)

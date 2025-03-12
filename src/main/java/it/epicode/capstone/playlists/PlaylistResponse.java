@@ -13,5 +13,5 @@ public class PlaylistResponse {
     private Long id;
     private String nomePlaylist;
     private List<String> youtubeUrls;
-    private VocalMemo vocalMemo;
+    private String url;
 }

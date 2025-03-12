@@ -23,6 +23,7 @@ public class VocalMemo {
     private String url;
 @CreationTimestamp
 private LocalDate dataRegistrazione;
+
     private String nomeRegistrazione;
 
     @OneToOne
