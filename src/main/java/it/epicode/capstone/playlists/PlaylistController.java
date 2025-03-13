@@ -4,6 +4,8 @@ import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.cloudinary.CloudinaryService;
 import it.epicode.capstone.vocalMemo.VocalMemo;
 import it.epicode.capstone.vocalMemo.VocalMemoService;
+import it.epicode.capstone.youtube.AddVideoToPlaylistRequest;
+import it.epicode.capstone.youtube.ModifyVideoRequest;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,29 +31,13 @@ public class PlaylistController {
     private final CloudinaryService cloudinaryService;
 
 
-    //@PostMapping("")
-    //@PreAuthorize("hasRole('ROLE_USER')")
-    //@ResponseStatus(HttpStatus.CREATED)
-    //public PlaylistResponse save(@Valid @RequestBody PlaylistRequest request, @AuthenticationPrincipal AppUser user) {
-     //   System.out.println("Request received: " + request);
-      //  return playlistService.save(request, user);
-    //}
-
-
-    @GetMapping("")
+    @GetMapping("/with-audio")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
     public List<PlaylistResponse> findAllByUser(@AuthenticationPrincipal AppUser user) {
-
         return playlistService.findAllByUser(user);
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @ResponseStatus(HttpStatus.OK)
-    public PlaylistResponse findById(@PathVariable Long id) {
-        return playlistService.findById(id);
-    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -59,6 +45,14 @@ public class PlaylistController {
     public PlaylistResponse update(@PathVariable Long id, @Valid @RequestBody PlaylistRequest request) {
         return playlistService.update(id, request);
     }
+
+    @PatchMapping("/{id}/modify-video")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @ResponseStatus(HttpStatus.OK)
+    public PlaylistResponse modifyVideoInPlaylist(@Valid @RequestBody ModifyVideoRequest request) {
+        return playlistService.modifyVideoInPlaylist(request);
+    }
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")

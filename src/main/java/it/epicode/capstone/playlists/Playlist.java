@@ -27,7 +27,7 @@ public class Playlist {
 
     private List<String> youtubeUrls = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne (cascade = CascadeType.REMOVE)
     @JoinColumn (name = "vocal_memo_id", nullable = true)
     private VocalMemo vocalMemo;
 

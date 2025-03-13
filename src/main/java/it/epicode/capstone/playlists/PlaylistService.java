@@ -7,6 +7,7 @@ import it.epicode.capstone.authentication.AppUserRepository;
 import it.epicode.capstone.vocalMemo.VocalMemo;
 import it.epicode.capstone.vocalMemo.VocalMemoRepository;
 import it.epicode.capstone.youtube.AddVideoToPlaylistRequest;
+import it.epicode.capstone.youtube.ModifyVideoRequest;
 import it.epicode.capstone.youtube.RemoveVideoRequest;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -63,10 +64,14 @@ public class PlaylistService {
 
     //DELETE
     @Transactional
-    public void delete(Long id) {
-        repository.deleteById(id);
+    public void delete(Long playlistId) {
+        Playlist playlist = repository.findById(playlistId).get();
+        if (playlist.getVocalMemo() != null) {
+            vocalMemoRepository.delete(playlist.getVocalMemo());
+        }
+        repository.delete(playlist);
     }
-
+/// //////////////////////////////////////////////////////////////////////////////////////////
 
     public List<PlaylistResponse> findAllByUser(AppUser user) {
         List<Playlist> playlists = repository.findAllByUser(user);
@@ -76,6 +81,9 @@ public class PlaylistService {
             playlistResponse.setId(playlist.getId());
             playlistResponse.setNomePlaylist(playlist.getNomePlaylist());
             playlistResponse.setYoutubeUrls(playlist.getYoutubeUrls());
+            if (playlist.getVocalMemo() != null) {
+                playlistResponse.setUrl(playlist.getVocalMemo().getUrl());
+            }
             playlistResponses.add(playlistResponse);
         }
         return playlistResponses;
@@ -131,4 +139,40 @@ public class PlaylistService {
     public Playlist save(Playlist playlist) {
         return repository.save(playlist);
     }
+
+    public PlaylistResponse modifyVideoInPlaylist(@Valid ModifyVideoRequest request) {
+        Playlist playlist = repository.findById(request.getPlaylistId())
+                .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
+
+        if ("add".equalsIgnoreCase(request.getAction())) {
+            // Aggiungi il video alla playlist
+            if (playlist.getYoutubeUrls() == null) {
+                playlist.setYoutubeUrls(new ArrayList<>());
+            }
+            playlist.getYoutubeUrls().add(request.getYoutubeUrl());
+        } else if ("remove".equalsIgnoreCase(request.getAction())) {
+            // Rimuovi il video dalla playlist
+            if (playlist.getYoutubeUrls() != null && playlist.getYoutubeUrls().contains(request.getYoutubeUrl())) {
+                playlist.getYoutubeUrls().remove(request.getYoutubeUrl());
+            } else {
+                throw new EntityNotFoundException("Il video non è presente nella playlist.");
+            }
+        } else {
+            throw new IllegalArgumentException("Azione non valida, deve essere 'add' o 'remove'.");
+        }
+
+        repository.save(playlist);
+
+        // Prepara la risposta
+        PlaylistResponse response = new PlaylistResponse();
+        response.setId(playlist.getId());
+        response.setNomePlaylist(playlist.getNomePlaylist());
+        response.setYoutubeUrls(playlist.getYoutubeUrls());
+
+        return response;
+    }
+
+
+
+
 }
