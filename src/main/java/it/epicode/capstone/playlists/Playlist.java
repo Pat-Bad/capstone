@@ -1,7 +1,6 @@
 package it.epicode.capstone.playlists;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.vocalMemo.VocalMemo;
 import jakarta.persistence.*;

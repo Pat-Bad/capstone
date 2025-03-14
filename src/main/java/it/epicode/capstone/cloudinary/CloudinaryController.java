@@ -31,13 +31,12 @@ public class CloudinaryController {
         try {
             Map result = cloudinary.uploader().upload(file.getBytes(),
                     Cloudinary.asMap(
-                            "resource_type", "auto",  // <-- Specifica il tipo di file
-                            "folder", "registrazioni"
-                    ));
+                            "resource_type", "auto", //tipo di file auto per audio
+                            "folder", "registrazioni"));
 
             String url = result.get("secure_url").toString();
             System.out.println(url);
-            return ResponseEntity.ok(url); // Ritorna l'URL dell'audio caricato
+            return ResponseEntity.ok(url); // ritorna l'url (essenziale per me)
 
         }
         catch (IOException e) {
@@ -49,18 +48,15 @@ public class CloudinaryController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> saveDiaryEntry(@RequestParam("file") MultipartFile file) {
-
         try {
             Map result = cloudinary.uploader().upload(file.getBytes(),
                     Cloudinary.asMap(
-                            "resource_type", "auto",  // <-- Specifica il tipo di file
-                            "folder", "diary"
-                    ));
-
+                            "resource_type", "auto",
+                            "folder", "diary")); //folder diverso!
 
         String url = result.get("secure_url").toString();
         System.out.println(url);
-        return ResponseEntity.ok(url); // Ritorna l'URL dell'audio caricato
+        return ResponseEntity.ok(url);
 
     }
         catch (IOException e) {

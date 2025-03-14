@@ -30,7 +30,7 @@ public class VocalMemoService {
 
     public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request,
                                   @AuthenticationPrincipal AppUser user) {
-        // Crea un oggetto VocalMemo
+
         VocalMemo vocalMemo = new VocalMemo();
         vocalMemo.setUrl(request.getUrl());
         vocalMemo.setUser(user);
@@ -39,7 +39,6 @@ public class VocalMemoService {
         vocalMemo.setPlaylist(playlist);
         vocalMemo.setNomeRegistrazione("Memo di " + user.getUsername());
 
-        // Salva l'oggetto nel database
         VocalMemo savedVocalMemo = vocalMemoRepository.save(vocalMemo);
 
         return new VocalMemoResponse(savedVocalMemo.getId(), savedVocalMemo.getNomeRegistrazione(), savedVocalMemo.getDataRegistrazione(),
@@ -71,10 +70,6 @@ public class VocalMemoService {
         vocalMemoRepository.delete(vocalMemo);
     }
 
-
-
-
-
     public List<VocalMemoResponse> findByUser(AppUser user) {
         return vocalMemoRepository.findByUser(user);
     }
@@ -95,10 +90,8 @@ public class VocalMemoService {
             vocalMemo.setUser(user);
             vocalMemo.setNomeRegistrazione(vocalMemo.getDataRegistrazione().toString());
 
-            // Salvataggio nel database
             VocalMemo savedVocalMemo = vocalMemoRepository.save(vocalMemo);
 
-            // Restituzione della risposta
             return new VocalMemoResponse(
                     savedVocalMemo.getId(),
                     savedVocalMemo.getNomeRegistrazione(),
@@ -116,9 +109,9 @@ public class VocalMemoService {
         public List<VocalMemoResponse> findAllDiaryEntries(AppUser user) {
             List<VocalMemoResponse> allEntries = vocalMemoRepository.findByUser(user);
 
-            // Filtra le voci vocali che sono nella cartella "diary" su Cloudinary
+            // stream per filtrare e mappare in lista
             return allEntries.stream()
-                    .filter(v -> v.getUrl().contains("/diary/"))  // Filtro in base alla cartella
+                    .filter(v -> v.getUrl().contains("/diary/"))
                     .map(v -> new VocalMemoResponse(
                             v.getId(),
                             v.getNomeRegistrazione(),

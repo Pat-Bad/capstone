@@ -18,8 +18,6 @@ public class EmailService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        //SimpleMailMessage message = new SimpleMailMessage();
-
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(body, true);

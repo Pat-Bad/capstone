@@ -4,17 +4,13 @@ import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.cloudinary.CloudinaryService;
 import it.epicode.capstone.vocalMemo.VocalMemo;
 import it.epicode.capstone.vocalMemo.VocalMemoService;
-import it.epicode.capstone.youtube.AddVideoToPlaylistRequest;
 import it.epicode.capstone.youtube.ModifyVideoRequest;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,7 +28,7 @@ public class PlaylistController {
 
 
     @GetMapping("/with-audio")
-
+    @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
     public List<PlaylistResponse> findAllByUser(@AuthenticationPrincipal AppUser user) {
         return playlistService.findAllByUser(user);
@@ -75,13 +71,11 @@ public class PlaylistController {
             // Carica l'audio su Cloudinary
             String audioUrl = cloudinaryService.uploadAudioToCloudinary(file);
 
-            // Crea la playlist
             Playlist playlist = new Playlist();
             playlist.setNomePlaylist(playlistName);
             playlist.setUser(user);
             playlist.setYoutubeUrls(youtubeUrls);
 
-            // Salva la playlist nel database
             Playlist savedPlaylist = playlistService.save(playlist);
             if (savedPlaylist == null) {
                 throw new RuntimeException("Errore durante il salvataggio della playlist.");
@@ -94,19 +88,17 @@ public class PlaylistController {
             vocalMemo.setUser(user);
             vocalMemo.setNomeRegistrazione("Memo di " + user.getUsername());
 
-            // Salva il VocalMemo nel DB
             VocalMemo savedVocalMemo = vocalMemoService.save(vocalMemo);
             if (savedVocalMemo == null) {
                 throw new RuntimeException("Errore durante il salvataggio del vocal memo.");
             }
 
-            // Associa il VocalMemo alla playlist
+            // Associo il VocalMemo alla playlist
             savedPlaylist.setVocalMemo(savedVocalMemo);
 
             // Salva di nuovo la playlist con il vocal memo associato
             savedPlaylist = playlistService.save(savedPlaylist);
 
-            // Restituisci la risposta
             PlaylistResponse playlistResponse = new PlaylistResponse(
                     savedPlaylist.getId(),
                     savedPlaylist.getNomePlaylist(),

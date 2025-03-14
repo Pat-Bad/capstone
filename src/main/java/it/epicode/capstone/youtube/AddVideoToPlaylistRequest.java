@@ -4,10 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-//request per aggiungere video alla playlist
-//serve id e url di youtube
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

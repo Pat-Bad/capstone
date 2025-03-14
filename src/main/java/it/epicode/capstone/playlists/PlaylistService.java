@@ -1,7 +1,5 @@
 package it.epicode.capstone.playlists;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.authentication.AppUserRepository;
 import it.epicode.capstone.vocalMemo.VocalMemo;
@@ -28,7 +26,6 @@ public class PlaylistService {
     private final AppUserRepository userRepository;
 
     //POST
-
     @Transactional
     public PlaylistResponse save(@Valid PlaylistRequest request, AppUser user) {
         Playlist playlist = new Playlist();
@@ -71,7 +68,7 @@ public class PlaylistService {
         }
         repository.delete(playlist);
     }
-/// //////////////////////////////////////////////////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////////////////////////////
 
     public List<PlaylistResponse> findAllByUser(AppUser user) {
         List<Playlist> playlists = repository.findAllByUser(user);
@@ -88,7 +85,6 @@ public class PlaylistService {
         }
         return playlistResponses;
     }
-
 
     public PlaylistResponse findById(Long id) {
         Playlist playlist = repository.findById(id)
@@ -145,13 +141,11 @@ public class PlaylistService {
                 .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
 
         if ("add".equalsIgnoreCase(request.getAction())) {
-            // Aggiungi il video alla playlist
             if (playlist.getYoutubeUrls() == null) {
                 playlist.setYoutubeUrls(new ArrayList<>());
             }
             playlist.getYoutubeUrls().add(request.getYoutubeUrl());
         } else if ("remove".equalsIgnoreCase(request.getAction())) {
-            // Rimuovi il video dalla playlist
             if (playlist.getYoutubeUrls() != null && playlist.getYoutubeUrls().contains(request.getYoutubeUrl())) {
                 playlist.getYoutubeUrls().remove(request.getYoutubeUrl());
             } else {
@@ -160,10 +154,8 @@ public class PlaylistService {
         } else {
             throw new IllegalArgumentException("Azione non valida, deve essere 'add' o 'remove'.");
         }
-
         repository.save(playlist);
 
-        // Prepara la risposta
         PlaylistResponse response = new PlaylistResponse();
         response.setId(playlist.getId());
         response.setNomePlaylist(playlist.getNomePlaylist());

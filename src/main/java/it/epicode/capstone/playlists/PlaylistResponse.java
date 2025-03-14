@@ -1,6 +1,4 @@
 package it.epicode.capstone.playlists;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import it.epicode.capstone.vocalMemo.VocalMemo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

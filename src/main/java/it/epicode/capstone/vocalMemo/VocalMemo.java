@@ -21,8 +21,9 @@ public class VocalMemo {
     private Long id;
 
     private String url;
-@CreationTimestamp
-private LocalDate dataRegistrazione = LocalDate.now();
+
+    @CreationTimestamp
+    private LocalDate dataRegistrazione = LocalDate.now();
 
     private String nomeRegistrazione;
 

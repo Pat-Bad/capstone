@@ -2,17 +2,14 @@ package it.epicode.capstone.vocalMemo;
 
 import it.epicode.capstone.authentication.AppUser;
 import it.epicode.capstone.cloudinary.CloudinaryService;
-import it.epicode.capstone.playlists.Playlist;
 import it.epicode.capstone.playlists.PlaylistRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -49,18 +46,12 @@ public class VocalMemoController {
         }
     }
 
-
     @GetMapping("/diary-entries")
-
+    @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
     public List<VocalMemoResponse> findAllDiaryEntries(@AuthenticationPrincipal AppUser user) {
-        return service.findAllDiaryEntries(user);  // Chiamata al servizio aggiornato
+        return service.findAllDiaryEntries(user);
     }
-
-
-
-
-
 
 
     @PutMapping("/{id}")

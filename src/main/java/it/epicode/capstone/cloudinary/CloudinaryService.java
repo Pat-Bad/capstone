@@ -4,13 +4,11 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.Map;
 
 @Service
 public class CloudinaryService {
-
     private final Cloudinary cloudinary;
 
     public CloudinaryService() {
@@ -21,13 +19,13 @@ public class CloudinaryService {
     }
 
     public String uploadAudioToCloudinary(MultipartFile file) throws IOException {
-        // Carica il file su Cloudinary
+        // Carica vocalmemo con playlist
         var uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
         return (String) uploadResult.get("url");
     }
 
     public String uploadDiaryEntryToCloudinary(MultipartFile file) throws IOException {
-        // Carica il file su Cloudinary
+        // Carica vocalmemo diario
         Map<String, Object> uploadResult = cloudinary.uploader().upload(file.getBytes(),
                 ObjectUtils.asMap("resource_type", "auto", "folder", "diary"));
         return (String) uploadResult.get("secure_url");

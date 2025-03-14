@@ -4,7 +4,6 @@ import it.epicode.capstone.playlists.PlaylistResponse;
 import it.epicode.capstone.playlists.PlaylistService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 

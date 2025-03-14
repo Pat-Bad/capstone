@@ -7,13 +7,6 @@ import com.google.api.services.youtube.YouTube;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-//istanza di youtube per usare l'api
-//httptransport gestisce le richieste http che devo fare
-//jsonfactory si occupa di parsare i dati
-//httprequest è vuoto perché personalizzabile, a me non serve niente
-//setapplicationname serve a youtube per tenere traccia di chi usa la sua api
-//build finalmente crea l'istanza
-
 @Configuration
 public class YouTubeConfig {
 
