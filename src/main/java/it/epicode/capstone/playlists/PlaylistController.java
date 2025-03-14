@@ -32,7 +32,7 @@ public class PlaylistController {
 
 
     @GetMapping("/with-audio")
-    @PreAuthorize("hasRole('ROLE_USER')")
+
     @ResponseStatus(HttpStatus.OK)
     public List<PlaylistResponse> findAllByUser(@AuthenticationPrincipal AppUser user) {
         return playlistService.findAllByUser(user);

@@ -3,6 +3,7 @@ package it.epicode.capstone.authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -39,6 +40,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         //.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Accesso libero a Swagger
                         //.requestMatchers("/api/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/playlist/**").permitAll()
+
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session

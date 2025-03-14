@@ -1,5 +1,7 @@
 package it.epicode.capstone.authentication;
 
+import it.epicode.capstone.email.EmailService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,15 +18,22 @@ public class AuthController {
 
     private final AppUserService appUserService;
     private final JwtTokenUtil jwtTokenUtil;
+    private final EmailService emailService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
-        appUserService.registerUser(
+    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) throws MessagingException {
+       AppUser newUser= appUserService.registerUser(
                 registerRequest.getUsername(),
                 registerRequest.getPassword(),
                 Set.of(Role.ROLE_USER),
                 registerRequest.getEmail()// Assegna il ruolo di default
         );
+        emailService.sendEmail(
+                newUser.getEmail(),
+        "Registrazione effettuata!",
+       "Ciao, " + newUser.getUsername() +"! " + "La registrazione si è conclusa, ora puoi effettuare il login." );
+
+
         return ResponseEntity.ok("Registrazione avvenuta con successo");
     }
 

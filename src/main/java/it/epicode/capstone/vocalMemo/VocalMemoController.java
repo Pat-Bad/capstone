@@ -51,7 +51,7 @@ public class VocalMemoController {
 
 
     @GetMapping("/diary-entries")
-    @PreAuthorize("hasRole('ROLE_USER')")
+
     @ResponseStatus(HttpStatus.OK)
     public List<VocalMemoResponse> findAllDiaryEntries(@AuthenticationPrincipal AppUser user) {
         return service.findAllDiaryEntries(user);  // Chiamata al servizio aggiornato
