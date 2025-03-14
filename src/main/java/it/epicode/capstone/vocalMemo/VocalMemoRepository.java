@@ -15,7 +15,9 @@ public interface VocalMemoRepository extends JpaRepository<VocalMemo, Long> {
     @Query("SELECT new it.epicode.capstone.vocalMemo.VocalMemoResponse(v.id, v.nomeRegistrazione, v" +
             ".dataRegistrazione, v.user.id, v.playlist.id, v.url) " +
             "FROM VocalMemo v WHERE v.user = :user")
+
     List<VocalMemoResponse> findByUser(@Param("user") AppUser user);
 
     VocalMemo findByPlaylistId(Long playlistId);
+
 }

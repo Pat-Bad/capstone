@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -83,5 +86,50 @@ public class VocalMemoService {
     public VocalMemo save(VocalMemo vocalMemo) {
         return vocalMemoRepository.save(vocalMemo);
     }
-}
+
+    public VocalMemoResponse saveDiaryEntry(String audioUrl, AppUser user) {
+        try {
+
+            VocalMemo vocalMemo = new VocalMemo();
+            vocalMemo.setUrl(audioUrl);
+            vocalMemo.setUser(user);
+            vocalMemo.setNomeRegistrazione(vocalMemo.getDataRegistrazione().toString());
+
+            // Salvataggio nel database
+            VocalMemo savedVocalMemo = vocalMemoRepository.save(vocalMemo);
+
+            // Restituzione della risposta
+            return new VocalMemoResponse(
+                    savedVocalMemo.getId(),
+                    savedVocalMemo.getNomeRegistrazione(),
+                    savedVocalMemo.getDataRegistrazione(),
+                    savedVocalMemo.getUser().getId(),
+                    savedVocalMemo.getPlaylist() != null ? savedVocalMemo.getPlaylist().getId() : null,
+                    savedVocalMemo.getUrl()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Errore durante il salvataggio del memo vocale.", e);
+        }
+    }
+
+
+        public List<VocalMemoResponse> findAllDiaryEntries(AppUser user) {
+            List<VocalMemoResponse> allEntries = vocalMemoRepository.findByUser(user);
+
+            // Filtra le voci vocali che sono nella cartella "diary" su Cloudinary
+            return allEntries.stream()
+                    .filter(v -> v.getUrl().contains("/diary/"))  // Filtro in base alla cartella
+                    .map(v -> new VocalMemoResponse(
+                            v.getId(),
+                            v.getNomeRegistrazione(),
+                            v.getDataRegistrazione(),
+                            v.getUserId(),
+                            v.getPlaylistId(),
+                            v.getUrl()))
+                    .collect(Collectors.toList());
+        }
+    }
+
+
+
 

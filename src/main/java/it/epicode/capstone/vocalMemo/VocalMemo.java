@@ -22,7 +22,7 @@ public class VocalMemo {
 
     private String url;
 @CreationTimestamp
-private LocalDate dataRegistrazione;
+private LocalDate dataRegistrazione = LocalDate.now();
 
     private String nomeRegistrazione;
 

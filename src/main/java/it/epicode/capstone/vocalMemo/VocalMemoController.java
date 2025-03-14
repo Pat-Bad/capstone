@@ -1,6 +1,7 @@
 package it.epicode.capstone.vocalMemo;
 
 import it.epicode.capstone.authentication.AppUser;
+import it.epicode.capstone.cloudinary.CloudinaryService;
 import it.epicode.capstone.playlists.Playlist;
 import it.epicode.capstone.playlists.PlaylistRepository;
 import jakarta.validation.Valid;
@@ -10,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -18,64 +21,46 @@ import java.util.List;
 @RequestMapping("api/vocalmemo")
 @PreAuthorize("hasRole('ROLE_USER')")
 public class VocalMemoController {
-
     private final VocalMemoService service;
     private final VocalMemoRepository vocalMemoRepository;
-    private final PlaylistRepository playlistRepository; // Repository per le playlist
-    @PostMapping("")
+    private final PlaylistRepository playlistRepository;
+    private final CloudinaryService cloudinaryService;
+
+
+    @PostMapping("/upload-diary")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.CREATED)
 
-    public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request,
-                                  @AuthenticationPrincipal AppUser user) {
-        return service.save(request, user);
-    }
+    public VocalMemoResponse saveDiaryEntry(@RequestParam("file")MultipartFile file,
+                                            @RequestParam("url") String url,
+                                            @AuthenticationPrincipal AppUser user) {
+        try{
+            String audioUrl = cloudinaryService.uploadDiaryEntryToCloudinary(file);
+            VocalMemo vocalMemo = new VocalMemo();
+            vocalMemo.setUrl(audioUrl);
+            vocalMemo.setUser(user);
+              // Puoi aggiungere il nome della registrazione
+            vocalMemo.setDataRegistrazione(LocalDate.now());
+            service.save(vocalMemo);  // Assumendo che ci sia un service che gestisce i VocalMemo
 
-//    @PostMapping("")
-//    @PreAuthorize("hasRole('ROLE_USER')")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public VocalMemoResponse save(@Valid @RequestBody VocalMemoRequest request,
-//                                  @AuthenticationPrincipal AppUser user) {
-//        Playlist playlist = null;
-//
-//        if (request.getPlaylistId() != null) {
-//            playlist = playlistRepository.findById(request.getPlaylistId())
-//                    .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
-//        }
-//
-//        return service.save(request, playlist, user);
-//    }
-
-
-    @GetMapping("")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @ResponseStatus(HttpStatus.OK)
-   public List<VocalMemoResponse> findAllByUser(@AuthenticationPrincipal AppUser user) {
-        return service.findByUser(user);
-    }
-
-
-
-
-    @GetMapping("/{playlistId}")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<VocalMemoResponse> getVocalMemo(@PathVariable Long playlistId) {
-        VocalMemo vocalMemo = service.findByPlaylistId(playlistId);
-        if (vocalMemo != null) {
-            VocalMemoResponse response = new VocalMemoResponse(
-                    vocalMemo.getId(),
-                    vocalMemo.getNomeRegistrazione(),
-                    vocalMemo.getDataRegistrazione(),
-                    vocalMemo.getUser().getId(),
-                    vocalMemo.getPlaylist().getId(),
-                    vocalMemo.getUrl()
-            );
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.notFound().build();
+            return service.saveDiaryEntry(audioUrl, user);
+        } catch (Exception e) {
+            throw new RuntimeException("Errore durante il salvataggio dell'audio.", e);
         }
     }
+
+
+    @GetMapping("/diary-entries")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @ResponseStatus(HttpStatus.OK)
+    public List<VocalMemoResponse> findAllDiaryEntries(@AuthenticationPrincipal AppUser user) {
+        return service.findAllDiaryEntries(user);  // Chiamata al servizio aggiornato
+    }
+
+
+
+
+
 
 
     @PutMapping("/{id}")
@@ -92,4 +77,8 @@ public class VocalMemoController {
         service.delete(id);
     }
 }
+
+
+
+
 
