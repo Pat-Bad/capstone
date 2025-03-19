@@ -40,8 +40,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         //.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Accesso libero a Swagger
                         //.requestMatchers("/api/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/playlist/**").permitAll()
-
+                        .requestMatchers("/api/auth/members").hasRole("ADMIN")
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session

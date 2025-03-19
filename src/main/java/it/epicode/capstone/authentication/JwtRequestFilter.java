@@ -81,7 +81,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private static final List<String> EXCLUDED_URLS = Arrays.asList(
             "/api/public",
-            "/api/auth/**",
+            "/api/auth/login",
+            "/api/auth/register",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/error",

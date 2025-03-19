@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class VocalMemoService {
         Playlist playlist = playlistRepository.findById(request.getPlaylistId())
                 .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
         vocalMemo.setPlaylist(playlist);
-        vocalMemo.setNomeRegistrazione("Memo di " + user.getUsername());
+        vocalMemo.setNomeRegistrazione(LocalDateTime.now().toString());
 
         VocalMemo savedVocalMemo = vocalMemoRepository.save(vocalMemo);
 
