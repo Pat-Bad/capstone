@@ -6,11 +6,13 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -56,11 +58,17 @@ public class AuthController {
 
     @GetMapping("/members")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getMembers() {
-        return AppUserRepository.findAll().stream()
-                .map(user -> new UserDto(user.getId(), user.getUsername(), user.getEmail()))
-                .collect(Collectors.toList());
-    }
-}
+    public ResponseEntity<?> getMembers() {
+        try {
+            List<UserDto> members = AppUserRepository.findAll().stream()
+                    .map(user -> new UserDto(user.getId(), user.getUsername(), user.getEmail()))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(members);
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("message", "Non hai il permesso di visualizzare la lista dei membri"));
+        }
+    }}
+
 
