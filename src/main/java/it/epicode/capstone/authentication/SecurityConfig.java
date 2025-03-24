@@ -36,7 +36,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+
+
+                .securityMatcher("/**")
                 .csrf(csrf -> csrf.disable()) // Disabilita CSRF
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authorizeHttpRequests(authorize -> authorize
                         //.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Accesso libero a Swagger
                         //.requestMatchers("/api/**").permitAll()
@@ -45,9 +51,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/members").hasRole("ADMIN")
                         .anyRequest().permitAll()
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                .cors(cors -> {});
+
+
+
+
 
         // Aggiungi il filtro JWT
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

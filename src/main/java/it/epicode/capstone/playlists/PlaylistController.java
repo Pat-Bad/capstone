@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/playlist")
 @PreAuthorize("hasRole('ROLE_USER')")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "patriciascapstone.netlify.app")
 public class PlaylistController {
     private final PlaylistService playlistService;
     private final VocalMemoService vocalMemoService;
