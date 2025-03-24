@@ -19,6 +19,7 @@ public class CorsFilterConfig {
             @Override
             protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
                     throws ServletException, IOException {
+                System.out.println("CORS filter applied");
                 response.setHeader("Access-Control-Allow-Origin", "https://patriciascapstone.netlify.app");
                 response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
                 response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Requested-With");
