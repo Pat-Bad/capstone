@@ -36,11 +36,12 @@ public class AuthController {
         );
         emailService.sendEmail(
                 newUser.getEmail(),
-                "Registrazione effettuata!",
-                "Ciao, " + newUser.getUsername() + "! " + "La registrazione si è conclusa, ora puoi effettuare il login.");
+                "You're in!",
+                "Hi, " + newUser.getUsername() + "! " + "That's it, you're in. Now, try to login and start creating " +
+                        "playlists with your favorite songs!");
 
 
-        return ResponseEntity.ok("Registrazione avvenuta con successo");
+        return ResponseEntity.ok("Signup successful!");
     }
 
     @PostMapping("/login")
@@ -67,7 +68,8 @@ public class AuthController {
             return ResponseEntity.ok(members);
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("message", "Non hai il permesso di visualizzare la lista dei membri"));
+                    .body(Map.of("message", "Access Denied, you don't have the necessary authority to see this " +
+                            "content."));
         }
     }}
 
