@@ -13,8 +13,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("https://capstone-p-one.vercel.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
-                .exposedHeaders("Authorization")
-                .allowCredentials(true);
+                .exposedHeaders("Authorization");
+
     }
 
 }
