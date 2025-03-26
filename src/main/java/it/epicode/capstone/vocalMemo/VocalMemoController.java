@@ -29,16 +29,16 @@ public class VocalMemoController {
     @ResponseStatus(HttpStatus.CREATED)
 
     public VocalMemoResponse saveDiaryEntry(@RequestParam("file")MultipartFile file,
-                                            @RequestParam("url") String url,
+
                                             @AuthenticationPrincipal AppUser user) {
         try{
             String audioUrl = cloudinaryService.uploadDiaryEntryToCloudinary(file);
             VocalMemo vocalMemo = new VocalMemo();
             vocalMemo.setUrl(audioUrl);
             vocalMemo.setUser(user);
-              // Puoi aggiungere il nome della registrazione
+
             vocalMemo.setDataRegistrazione(LocalDate.now());
-            service.save(vocalMemo);  // Assumendo che ci sia un service che gestisce i VocalMemo
+
 
             return service.saveDiaryEntry(audioUrl, user);
         } catch (Exception e) {
