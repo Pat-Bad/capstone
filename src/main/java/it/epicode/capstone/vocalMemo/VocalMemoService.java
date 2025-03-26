@@ -5,18 +5,17 @@ import it.epicode.capstone.authentication.AppUserRepository;
 import it.epicode.capstone.playlists.Playlist;
 import it.epicode.capstone.playlists.PlaylistRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,8 +72,8 @@ public class VocalMemoService {
         vocalMemoRepository.delete(vocalMemo);
     }
 
-    public List<VocalMemoResponse> findByUser(AppUser user) {
-        return vocalMemoRepository.findByUser(user);
+    public Page<VocalMemoResponse> findByUser(AppUser user, Pageable pageable) {
+        return vocalMemoRepository.findByUser(user, pageable);
     }
 
     public VocalMemo findByPlaylistId(Long playlistId) {
@@ -109,22 +108,18 @@ public class VocalMemoService {
     }
 
 
-        public List<VocalMemoResponse> findAllDiaryEntries(AppUser user) {
-            List<VocalMemoResponse> allEntries = vocalMemoRepository.findByUser(user);
+        public Page<VocalMemoResponse> findAllDiaryEntries(AppUser user, Pageable pageable) {
+            Page<VocalMemoResponse> allEntries = vocalMemoRepository.findByUser(user, pageable);
 
             // stream per filtrare e mappare in lista
-            return allEntries.stream()
+            List<VocalMemoResponse> filteredEntries = allEntries.getContent().stream()
                     .filter(v -> v.getUrl().contains("/diary/"))
-                    .map(v -> new VocalMemoResponse(
-                            v.getId(),
-                            v.getNomeRegistrazione(),
-                            v.getDataRegistrazione(),
-                            v.getUserId(),
-                            v.getPlaylistId(),
-                            v.getUrl()))
                     .collect(Collectors.toList());
+
+            return new PageImpl<>(filteredEntries, pageable, filteredEntries.size());
         }
-    }
+}
+
 
 
 

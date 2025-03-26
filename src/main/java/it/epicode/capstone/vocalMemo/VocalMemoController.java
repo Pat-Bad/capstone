@@ -5,6 +5,8 @@ import it.epicode.capstone.cloudinary.CloudinaryService;
 import it.epicode.capstone.playlists.PlaylistRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -49,8 +51,10 @@ public class VocalMemoController {
     @GetMapping("/diary-entries")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
-    public List<VocalMemoResponse> findAllDiaryEntries(@AuthenticationPrincipal AppUser user) {
-        return service.findAllDiaryEntries(user);
+    public Page<VocalMemoResponse> findAllDiaryEntries(@AuthenticationPrincipal AppUser user,
+                                                       @RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "10") int size) {
+        return service.findAllDiaryEntries(user, PageRequest.of(page, size));
     }
 
 

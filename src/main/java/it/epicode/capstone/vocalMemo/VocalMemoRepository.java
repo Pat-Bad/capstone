@@ -1,6 +1,8 @@
 package it.epicode.capstone.vocalMemo;
 
 import it.epicode.capstone.authentication.AppUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,8 +15,7 @@ public interface VocalMemoRepository extends JpaRepository<VocalMemo, Long> {
     @Query("SELECT new it.epicode.capstone.vocalMemo.VocalMemoResponse(v.id, v.nomeRegistrazione, v" +
             ".dataRegistrazione, v.user.id, v.playlist.id, v.url) " +
             "FROM VocalMemo v WHERE v.user = :user")
-
-    List<VocalMemoResponse> findByUser(@Param("user") AppUser user);
+    Page<VocalMemoResponse> findByUser(@Param("user") AppUser user, Pageable pageable);
 
     VocalMemo findByPlaylistId(Long playlistId);
 }
