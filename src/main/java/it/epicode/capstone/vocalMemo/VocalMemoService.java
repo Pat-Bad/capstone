@@ -8,6 +8,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -53,8 +55,8 @@ public class VocalMemoService {
                 .orElseThrow(() -> new EntityNotFoundException("VocalMemo non trovato con id: " + id));
     }
 
-    public List<Playlist> findAllByUser(AppUser user) {
-        return playlistRepository.findAllByUser(user);
+    public Page<Playlist> findAllByUser(AppUser user, Pageable pageable) {
+        return playlistRepository.findAllByUser(user, pageable);
     }
 
     //PUT
