@@ -7,6 +7,9 @@ import it.epicode.capstone.vocalMemo.VocalMemoService;
 import it.epicode.capstone.youtube.ModifyVideoRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,8 +33,11 @@ public class PlaylistController {
     @GetMapping("/with-audio")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
-    public List<PlaylistResponse> findAllByUser(@AuthenticationPrincipal AppUser user) {
-        return playlistService.findAllByUser(user);
+    public Page<PlaylistResponse> findAllByUser(@AuthenticationPrincipal AppUser user,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = (Pageable) PageRequest.of(page, size);
+        return playlistService.findAllByUser(user, pageable);
     }
 
 

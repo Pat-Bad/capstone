@@ -11,11 +11,13 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
 import java.util.ArrayList;
-import java.util.List;
+
 
 @Service
 @Validated
@@ -70,20 +72,18 @@ public class PlaylistService {
     }
       /////////////////////////////////////////////////////////////////////////////////////////////
 
-    public List<PlaylistResponse> findAllByUser(AppUser user) {
-        List<Playlist> playlists = repository.findAllByUser(user);
-        List<PlaylistResponse> playlistResponses = new ArrayList<>();
-        for (Playlist playlist : playlists) {
-            PlaylistResponse playlistResponse = new PlaylistResponse();
-            playlistResponse.setId(playlist.getId());
-            playlistResponse.setNomePlaylist(playlist.getNomePlaylist());
-            playlistResponse.setYoutubeUrls(playlist.getYoutubeUrls());
+    public Page<PlaylistResponse> findAllByUser(AppUser user, Pageable pageable) {
+        Page<Playlist> playlists = repository.findAllByUser(user, pageable);
+        return playlists.map(playlist -> {
+            PlaylistResponse response = new PlaylistResponse();
+            response.setId(playlist.getId());
+            response.setNomePlaylist(playlist.getNomePlaylist());
+            response.setYoutubeUrls(playlist.getYoutubeUrls());
             if (playlist.getVocalMemo() != null) {
-                playlistResponse.setUrl(playlist.getVocalMemo().getUrl());
+                response.setUrl(playlist.getVocalMemo().getUrl());
             }
-            playlistResponses.add(playlistResponse);
-        }
-        return playlistResponses;
+            return response;
+        });
     }
 
     public PlaylistResponse findById(Long id) {
