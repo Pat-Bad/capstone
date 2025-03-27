@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/playlist")
 @PreAuthorize("hasRole('ROLE_USER')")
-@CrossOrigin(origins = "patriciascapstone.netlify.app")
+@CrossOrigin(origins = "capstone-p-one.vercel.app")
 public class PlaylistController {
     private final PlaylistService playlistService;
     private final VocalMemoService vocalMemoService;
