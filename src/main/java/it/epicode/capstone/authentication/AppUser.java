@@ -34,7 +34,6 @@ public class AppUser implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
     private  boolean accountNonExpired=true;
     private  boolean accountNonLocked=true;
     private  boolean credentialsNonExpired=true;
@@ -47,9 +46,7 @@ public class AppUser implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Playlist> playlists;
 
-
     private String email;
-
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {

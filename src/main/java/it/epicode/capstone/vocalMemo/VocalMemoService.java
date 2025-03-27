@@ -5,7 +5,6 @@ import it.epicode.capstone.authentication.AppUserRepository;
 import it.epicode.capstone.playlists.Playlist;
 import it.epicode.capstone.playlists.PlaylistRepository;
 import jakarta.persistence.EntityNotFoundException;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
