@@ -51,8 +51,8 @@ public class PlaylistController {
     @PatchMapping("/{id}/modify-video")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
-    public PlaylistResponse modifyVideoInPlaylist(@Valid @RequestBody ModifyVideoRequest request) {
-        return playlistService.modifyVideoInPlaylist(request);
+    public PlaylistResponse modifyVideoInPlaylist(@Valid @RequestBody ModifyVideoRequest request, @PathVariable Long id) {
+        return playlistService.modifyVideoInPlaylist(request, id);
     }
 
 

@@ -136,7 +136,7 @@ public class PlaylistService {
         return repository.save(playlist);
     }
 
-    public PlaylistResponse modifyVideoInPlaylist(@Valid ModifyVideoRequest request) {
+    public PlaylistResponse modifyVideoInPlaylist(@Valid ModifyVideoRequest request, Long id) {
         Playlist playlist = repository.findById(request.getPlaylistId())
                 .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
 
