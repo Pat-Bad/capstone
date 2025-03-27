@@ -1,0 +1,5 @@
+Il progetto che intendo sviluppare è una web app che permette agli utenti di creare playlist personalizzate con un tocco personale:
+ un messaggio vocale dedicato che viene riprodotto prima dell’inizio della playlist.
+ Ogni playlist non sarà solo un elenco di canzoni, ma risulterà arricchita da dediche o pensieri speciali.
+Inoltre, la sezione "diary" permetterà agli utenti di registrare e ascoltare messaggi datati, come se fossero pagine di
+un diario segreto.
