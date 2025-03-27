@@ -107,7 +107,13 @@ public class PlaylistService {
         if (playlist.getYoutubeUrls() == null) {
             playlist.setYoutubeUrls(new ArrayList<>());
         }
-        playlist.getYoutubeUrls().add(request.getYoutubeUrl());
+
+        String youtubeUrl = request.getYoutubeUrl();
+
+        if (!playlist.getYoutubeUrls().contains(youtubeUrl)) {
+            playlist.getYoutubeUrls().add(youtubeUrl);
+        }
+
         repository.save(playlist);
 
         PlaylistResponse response = new PlaylistResponse();
@@ -121,8 +127,14 @@ public class PlaylistService {
     public PlaylistResponse removeVideoFromPlaylist(@Valid RemoveVideoRequest request) {
         Playlist playlist = repository.findById(request.getPlaylistId())
                 .orElseThrow(() -> new EntityNotFoundException("Playlist non trovata, ID " + request.getPlaylistId()));
-        playlist.getYoutubeUrls().remove(request.getYoutubeUrl());
+
+        String youtubeUrl = request.getYoutubeUrl();
+        if (playlist.getYoutubeUrls() != null && playlist.getYoutubeUrls().contains(youtubeUrl)) {
+            playlist.getYoutubeUrls().remove(youtubeUrl);
+        }
+
         repository.save(playlist);
+
 
         PlaylistResponse response = new PlaylistResponse();
         response.setId(playlist.getId());
